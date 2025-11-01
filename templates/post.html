@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}More Info{% endblock %}
+
+{% block body %}
+
+<body class="bg-gradient-to-b from-blue-50 to-white min-h-screen p-6 m-5">
+  <div class="max-w-4xl mx-auto">
+    <!-- Back & Buttons -->
+    <div class="flex justify-between items-center mb-4">
+      <a href="/" class="text-gray-500 hover:text-gray-700 text-sm flex items-center space-x-1">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+        <span> Back to Directory</span>
+      </a>
+    </div>
+
+    <!-- Business Card -->
+    <div class="bg-white shadow rounded-2xl overflow-hidden mb-6">
+      <div class="relative">
+        <img src="https://images.unsplash.com/photo-1524985069026-dd778a71c7b4" alt="Cinema" class="w-full h-64 object-cover">
+        <div class="absolute top-4 right-4 bg-black text-white text-sm px-3 py-1 rounded-lg">
+          {% block category %}{%endblock%}
+        </div>
+      </div>
+      <div class="p-6">
+        <h1 class="text-2xl font-semibold text-gray-900 mb-2">{% block buisnessName %}{%endblock%}</h1>
+
+        <div class="flex items-center space-x-1 mb-1">
+          <div class="flex text-gray-300">
+            <svg class="w-5 h-5" fill="currentColor"><path d="M9.049 2.927..."/></svg>
+          </div>
+          <p class="text-sm text-gray-500">{% block ratings %}{%endblock%}</p>
+        </div>
+
+        <p class="text-gray-600 mb-4">
+          {% block description %}{%endblock%}
+        </p>
+
+        <div class="space-y-2 text-gray-700 text-sm">
+          <p class="flex items-center space-x-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0L6.343 16.657A8 8 0 1117.657 16.657z" />
+            </svg>
+            <span>{% block address %}{%endblock%}</span>
+          </p>
+          <p class="flex items-center space-x-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M3 5h2l3.6 7.59-1.35 2.44A1 1 0 008 17h8a1 1 0 00.75-.33L21 13H6" />
+            </svg>
+            <span>{% block phoneNumber %}{%endblock%}</span>
+          </p>
+          <p>{% block timePeriod %}{%endblock%}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Review Section -->
+    <div class="bg-white shadow rounded-2xl p-6 mb-6">
+        <h2 class="text-lg font-semibold text-gray-900 mb-2">Write a Review</h2>
+        <p class="text-sm text-gray-500 mb-2">Signed in as <strong>yaoyao Xiong</strong></p>
+        <div class="mb-3">
+            <label class="text-sm font-medium text-gray-700">Rating</label>
+            <div id="stars" class="flex justify-left space-x-2 cursor-pointer">
+            <!-- Stars will be here -->
+                <svg data-value="1" xmlns="http://www.w3.org/2000/svg" class="star w-10 h-10 text-gray-300 hover:text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.966a1 1 0 00.95.69h4.18c.969 0 1.371 1.24.588 1.81l-3.385 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.538 1.118l-3.385-2.455a1 1 0 00-1.176 0l-3.385 2.455c-.783.57-1.838-.196-1.538-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.045 9.393c-.783-.57-.38-1.81.588-1.81h4.18a1 1 0 00.95-.69l1.286-3.966z"/></svg>
+                <svg data-value="2" xmlns="http://www.w3.org/2000/svg" class="star w-10 h-10 text-gray-300 hover:text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.966a1 1 0 00.95.69h4.18c.969 0 1.371 1.24.588 1.81l-3.385 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.538 1.118l-3.385-2.455a1 1 0 00-1.176 0l-3.385 2.455c-.783.57-1.838-.196-1.538-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.045 9.393c-.783-.57-.38-1.81.588-1.81h4.18a1 1 0 00.95-.69l1.286-3.966z"/></svg>
+                <svg data-value="3" xmlns="http://www.w3.org/2000/svg" class="star w-10 h-10 text-gray-300 hover:text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.966a1 1 0 00.95.69h4.18c.969 0 1.371 1.24.588 1.81l-3.385 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.538 1.118l-3.385-2.455a1 1 0 00-1.176 0l-3.385 2.455c-.783.57-1.838-.196-1.538-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.045 9.393c-.783-.57-.38-1.81.588-1.81h4.18a1 1 0 00.95-.69l1.286-3.966z"/></svg>
+                <svg data-value="4" xmlns="http://www.w3.org/2000/svg" class="star w-10 h-10 text-gray-300 hover:text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.966a1 1 0 00.95.69h4.18c.969 0 1.371 1.24.588 1.81l-3.385 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.538 1.118l-3.385-2.455a1 1 0 00-1.176 0l-3.385 2.455c-.783.57-1.838-.196-1.538-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.045 9.393c-.783-.57-.38-1.81.588-1.81h4.18a1 1 0 00.95-.69l1.286-3.966z"/></svg>
+                <svg data-value="5" xmlns="http://www.w3.org/2000/svg" class="star w-10 h-10 text-gray-300 hover:text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.966a1 1 0 00.95.69h4.18c.969 0 1.371 1.24.588 1.81l-3.385 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.538 1.118l-3.385-2.455a1 1 0 00-1.176 0l-3.385 2.455c-.783.57-1.838-.196-1.538-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.045 9.393c-.783-.57-.38-1.81.588-1.81h4.18a1 1 0 00.95-.69l1.286-3.966z"/></svg>
+            </div>
+        </div>
+
+      <textarea placeholder="Share your experience..." class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-purple-400 focus:outline-none mb-3"></textarea>
+
+      <button class="w-full bg-gradient-to-r from-purple-400 to-indigo-500 text-white font-medium py-2 rounded-lg hover:opacity-90">
+        Submit Review
+      </button>
+    </div>
+
+    <!-- Customer Reviews -->
+    <div class="bg-white shadow rounded-2xl p-6">
+      <h2 class="text-lg font-semibold text-gray-900 mb-2">Customer Reviews {% block reviewNumber %}{%endblock%}</h2>
+      <p class="text-sm text-black">{% block reviews %}{%endblock%}</p>
+    </div>
+  </div>
+</body>
+
+{%endblock%}

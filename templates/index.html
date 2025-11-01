@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block title %}Local Buisnesses{% endblock %}
+
+{% block body %}
+
+<div class="min-h-screen bg-gradient-to-b from-black via-[#0a0a12] to-[#0f0f1a] text-white font-inter">
+
+  <!-- Header -->
+  <!-- <div class="flex justify-between items-center px-8 py-6 border-b border-[#1f1f2e]">
+    <h1 class="text-2xl font-semibold text-white">Business Directory</h1>
+    <button class="bg-[#7c3aed] hover:bg-[#6d28d9] text-white font-medium px-5 py-2 rounded-lg shadow-lg transition">
+      Sign in to add your buisness
+    </button>
+  </div> -->
+
+  <!-- Search and Filter -->
+  <div class="px-8 py-6">
+    <div class="flex items-center gap-4">
+      <input type="text" placeholder="Search for businesses..." onkeyup="searchBusinesses()" id="search-bar"
+        class="flex-1 rounded-lg bg-[#1a1a27] border border-[#2a2a3d] text-gray-200 placeholder-gray-500 py-2 px-4 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition">
+
+      <select
+        class="bg-[#1a1a27] border border-[#2a2a3d] text-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition">
+        <option>Default</option>
+        <option>Rating</option>
+        <option>Newest</option>
+      </select>
+    </div>
+
+    <!-- Categories -->
+    <div class="flex gap-3 mt-5 flex-wrap">
+      <button onclick="filterBusinesses('all',this)" class="filter-btn bg-slate-800 border border-slate-700 text-textmuted px-4 py-1.5 rounded-full text-sm hover:bg-slate-700">All</button>
+      <button onclick="filterBusinesses('food',this)" class="filter-btn bg-slate-800 border border-slate-700 text-textmuted px-4 py-1.5 rounded-full text-sm hover:bg-slate-700">Food</button>
+      <button onclick="filterBusinesses('coffee',this)" class="filter-btn bg-slate-800 border border-slate-700 text-textmuted px-4 py-1.5 rounded-full text-sm hover:bg-slate-700">Coffee</button>
+      <button onclick="filterBusinesses('services',this)" class="filter-btn bg-slate-800 border border-slate-700 text-textmuted px-4 py-1.5 rounded-full text-sm hover:bg-slate-700">Services</button>
+      <button onclick="filterBusinesses('shopping',this)" class="filter-btn bg-slate-800 border border-slate-700 text-textmuted px-4 py-1.5 rounded-full text-sm hover:bg-slate-700">Shopping</button>
+      <button onclick="filterBusinesses('entertainment',this)" class="filter-btn bg-slate-800 border border-slate-700 text-textmuted px-4 py-1.5 rounded-full text-sm hover:bg-slate-700">Entertainment</button>
+      <button onclick="filterBusinesses('health',this)" class="filter-btn bg-slate-800 border border-slate-700 text-textmuted px-4 py-1.5 rounded-full text-sm hover:bg-slate-700">Health</button>
+    </div>
+  </div>
+
+  <!-- Businesses -->
+  <div class="px-8 mt-10">
+    <p class="text-gray-400 mb-6">Found <span class="font-semibold text-purple-400">6</span> businesses</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Card Template -->
+      <div onclick="window.location.href='/buisness-name'"  class="bg-[#12121a] rounded-2xl border border-[#2a2a3d] overflow-hidden shadow-lg hover:shadow-purple-900/40 transition business" data-type="entertainment">
+        <div class="relative">
+          <img src="https://images.unsplash.com/photo-1505685296765-3a2736de412f?auto=format&fit=crop&w=800&q=80"
+            class="w-full h-52 object-cover opacity-90 hover:opacity-100 transition" alt="">
+          <span class="absolute top-3 left-3 bg-purple-600 text-xs px-3 py-1 rounded-full shadow text-white font-medium">
+            Entertainment
+          </span>
+          <button class="absolute top-3 right-3 bg-[#1a1a27]/70 rounded-full p-2 hover:bg-purple-700 transition text-white">
+            ❤️
+          </button>
+        </div>
+        <div class="p-5">
+          <h3 class="font-semibold text-lg text-gray-100 buisness-name">Sunset Cinema</h3>
+          <div class="flex items-center text-yellow-400 text-sm mt-1">
+            ★★★★★
+            <span class="text-gray-500 text-sm ml-2">0.0 (0 reviews)</span>
+          </div>
+          <div class="text-gray-400 text-sm mt-3">
+            <p>📍 890 Movie Boulevard, Theater Row</p>
+            <p>📞 (555) 678-9012</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Copy this card structure for the other two below -->
+      <div class="bg-[#12121a] rounded-2xl border border-[#2a2a3d] overflow-hidden shadow-lg hover:shadow-purple-900/40 transition business" data-type="coffee">
+        <div class="relative">
+          <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80"
+            class="w-full h-52 object-cover opacity-90 hover:opacity-100 transition" alt="">
+          <span class="absolute top-3 left-3 bg-purple-600 text-xs px-3 py-1 rounded-full shadow text-white font-medium">
+            Coffee
+          </span>
+          <button class="absolute top-3 right-3 bg-[#1a1a27]/70 rounded-full p-2 hover:bg-purple-700 transition text-white">
+            ❤️
+          </button>
+        </div>
+        <div class="p-5">
+          <h3 class="font-semibold text-lg text-gray-100 buisness-name">Brew & Bean Coffee House</h3>
+          <div class="flex items-center text-yellow-400 text-sm mt-1">
+            ★★★★☆
+            <span class="text-gray-500 text-sm ml-2">4.5 (2 reviews)</span>
+          </div>
+          <div class="text-gray-400 text-sm mt-3">
+            <p>📍 456 Oak Avenue, Arts District</p>
+            <p>📞 (555) 234-5678</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-[#12121a] rounded-2xl border border-[#2a2a3d] overflow-hidden shadow-lg hover:shadow-purple-900/40 transition business" data-type="health">
+        <div class="relative">
+          <img src="https://images.unsplash.com/photo-1558611848-73f7eb4001a1?auto=format&fit=crop&w=800&q=80"
+            class="w-full h-52 object-cover opacity-90 hover:opacity-100 transition" alt="">
+          <span class="absolute top-3 left-3 bg-purple-600 text-xs px-3 py-1 rounded-full shadow text-white font-medium ">
+            Health
+          </span>
+          <button class="absolute top-3 right-3 bg-[#1a1a27]/70 rounded-full p-2 hover:bg-purple-700 transition text-white">
+            ❤️
+          </button>
+        </div>
+        <div class="p-5">
+          <h3 class="font-semibold text-lg text-gray-100 buisness-name">Elite Fitness & Wellness</h3>
+          <div class="flex items-center text-yellow-400 text-sm mt-1">
+            ★★★★☆
+            <span class="text-gray-500 text-sm ml-2">4.3 (3 reviews)</span>
+          </div>
+          <div class="text-gray-400 text-sm mt-3">
+            <p>📍 789 Fitness Lane, West Side</p>
+            <p>📞 (555) 345-6789</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="{{url_for('static', filename='sortAndFilter.js')}}"></script>
+{% endblock %}

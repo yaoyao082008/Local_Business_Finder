@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    {% block head %}{% endblock %}
+  </head>
+
+  <body class="bg-[#0f1624] text-white">
+    <!-- Navbar -->
+    <nav class="flex items-center justify-between px-6 py-3 bg-[#121a26] border-b border-[#1c2636]">
+      <!-- Left Section -->
+      <div class="flex items-center space-x-8">
+        <!-- Logo -->
+        <a href="/">
+          <div class="flex items-center space-x-2 cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#7b6ef6" class="w-8 h-8">
+              <path d="M12 2C8 2 6 6 6 6s2 4 6 4 6-4 6-4-2-4-6-4zm0 20c4 0 6-4 6-4s-2-4-6-4-6 4-6 4 2 4 6 4z" />
+            </svg>
+            <span class="font-semibold text-lg">Local Business</span>
+          </div>
+        </a>
+
+        <!-- Nav Links -->
+        <div class="flex space-x-6">
+          <a href="#" class="text-gray-300 hover:text-white font-medium">Team</a>
+          <a href="#" class="text-gray-300 hover:text-white font-medium">Projects</a>
+          <a href="#" class="text-gray-300 hover:text-white font-medium">Calendar</a>
+        </div>
+      </div>
+
+      <!-- Right Section -->
+      <div class="flex items-center space-x-4">
+        <button
+        id="openModalBtn"
+        class="bg-[#7b6ef6] text-white font-semibold px-4 py-2 rounded-xl hover:bg-[#6759d9] transition"
+        {% if user %}location.href="/account"{% endif %}
+        >
+        {% if not user %}
+          Sign In
+          {% else %}
+          Your Account
+        {% endif %}
+        </button>
+      </div>
+    </nav>
+    
+    {% if not user %}
+    <!-- Sign In Modal -->
+    <div
+      id="signin-modal"
+      class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"
+    >
+      <div class="bg-[#1a2234] rounded-2xl shadow-xl w-full max-w-md mx-4 p-8 relative">
+        <!-- Close button -->
+        <button id="closeModalBtn" class="absolute top-3 right-3 text-gray-400 hover:text-white text-2xl">
+          &times;
+        </button>
+
+        <!-- Modal content -->
+        <h2 class="text-2xl font-bold text-center mb-4">Sign In</h2>
+        <p class="text-gray-400 text-center mb-6">Access your account to manage your business and leave reviews!</p>
+
+        <form class="space-y-4" action="/login-user-post" method="POST">
+          <input
+            type="string"
+            name="username"
+            placeholder="Username"
+            class="w-full bg-[#252f47] text-white px-4 py-2 rounded-lg focus:ring-2 focus:ring-[#7b6ef6] focus:outline-none"
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            class="w-full bg-[#252f47] text-white px-4 py-2 rounded-lg focus:ring-2 focus:ring-[#7b6ef6] focus:outline-none"
+          />
+
+          <button
+            type="submit"
+            value="submit"
+            class="w-full bg-[#7b6ef6] hover:bg-[#6759d9] text-white font-semibold py-2 rounded-lg transition"
+          >
+            Sign In
+          </button>
+        </form>
+        
+        <!-- Divider -->
+        <div class="flex items-center my-6">
+          <hr class="flex-grow border-gray-700" />
+          <span class="px-3 text-gray-500 text-sm">or</span>
+          <hr class="flex-grow border-gray-700" />
+        </div>      
+      <p class="text-center text-gray-400 mt-6">
+        Don’t have an account?
+        <a href="/register" class="text-[#7b6ef6] hover:underline">Register</a>
+      </p>
+    </div>
+  </div>
+  {% endif %}
+
+  {% block body %}
+  {% endblock %}
+  
+  
+    <!-- Scripts -->
+    <script>
+      const modal = document.getElementById("signin-modal");
+      const openModalBtn = document.getElementById("openModalBtn");
+      const closeModalBtn = document.getElementById("closeModalBtn");
+
+      openModalBtn.addEventListener("click", () => {
+        modal.classList.remove("hidden");
+      });
+
+      closeModalBtn.addEventListener("click", () => {
+        modal.classList.add("hidden");
+      });
+
+      window.addEventListener("click", (e) => {
+        if (e.target === modal) modal.classList.add("hidden");
+      });
+    </script>
+
+  </body>
+</html>
