@@ -9,6 +9,11 @@ db.init_db(app)
 def home():
     return render_template("index.html", user=session.get("user"))
 
+@app.route("/signout")
+def signout():
+    session["user"] = None
+    return redirect("/")    
+
 @app.route("/login-user-post",methods=["POST"])
 def loginUserPost():
     username = request.form.get("username")
