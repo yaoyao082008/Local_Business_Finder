@@ -32,17 +32,37 @@
 
       <!-- Right Section -->
       <div class="flex items-center space-x-4">
+        {% if not user %}
         <button
         id="openModalBtn"
         class="bg-[#7b6ef6] text-white font-semibold px-4 py-2 rounded-xl hover:bg-[#6759d9] transition"
-        {% if user %}location.href="/account"{% endif %}
         >
-        {% if not user %}
-          Sign In
-          {% else %}
-          Your Account
-        {% endif %}
+        Sign In
         </button>
+        {% else %}
+
+        <div class=" relative inline-block text-left dropdown">
+          <span class="rounded-md shadow-sm">
+            <button   class="bg-[#7b6ef6] text-white font-semibold px-4 py-2 rounded-xl hover:bg-[#6759d9] transition"
+              type="button" aria-haspopup="true" aria-expanded="true" aria-controls="headlessui-menu-items-117">
+
+              <span>Account</span>
+            </button>
+          </span>
+          <div class="hidden dropdown-menu">
+            <div class="absolute right-0 w-56 mt-2 origin-top-right bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg outline-none" aria-labelledby="headlessui-menu-button-1" id="headlessui-menu-items-117" role="menu">
+              <div class="px-4 py-3">
+                <p class="text-sm text-black leading-5">Signed in as <strong>{{user.username}}</strong></p>
+              </div>
+              <div class="py-1">
+                <a href="#" class="text-gray-700 flex justify-between w-full px-4 py-2 text-sm leading-5 text-left"  role="menuitem" >Account settings</a>
+              <div class="py-1">
+                <a href="/signout" class="text-gray-700 flex justify-between w-full px-4 py-2 text-sm leading-5 text-left"  role="menuitem" >Sign out</a></div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+        
       </div>
     </nav>
     
@@ -101,10 +121,17 @@
 
   {% block body %}
   {% endblock %}
-  
+    <style>
+    .dropdown:focus-within .dropdown-menu {
+      display:block;
+    }
+    </style>
   
     <!-- Scripts -->
+
+
     <script>
+      console.log("hello")
       const modal = document.getElementById("signin-modal");
       const openModalBtn = document.getElementById("openModalBtn");
       const closeModalBtn = document.getElementById("closeModalBtn");

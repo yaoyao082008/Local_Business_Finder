@@ -37,90 +37,140 @@
       <button onclick="filterBusinesses('shopping',this)" class="filter-btn bg-slate-800 border border-slate-700 text-textmuted px-4 py-1.5 rounded-full text-sm hover:bg-slate-700">Shopping</button>
       <button onclick="filterBusinesses('entertainment',this)" class="filter-btn bg-slate-800 border border-slate-700 text-textmuted px-4 py-1.5 rounded-full text-sm hover:bg-slate-700">Entertainment</button>
       <button onclick="filterBusinesses('health',this)" class="filter-btn bg-slate-800 border border-slate-700 text-textmuted px-4 py-1.5 rounded-full text-sm hover:bg-slate-700">Health</button>
+      {% if user %}
+      <button id = "createBuisnessBtn" class="bg-[#7b6ef6] text-white font-semibold px-4 py-2 rounded-xl hover:bg-[#6759d9] ml-auto transition"> Add Your Buisness</button>
+
+      <div
+      id="createBuisness-modal"
+      class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+
+        <div class="bg-[#1a2234] rounded-2xl shadow-xl w-full max-w-md mx-4 p-8 relative">
+          <!-- Close button -->
+          <button id="closeBuisnessModalBtn" class="absolute top-3 right-3 text-gray-400 hover:text-white text-2xl">
+            &times;
+          </button>
+
+          <!-- Modal content -->
+          <h2 class="text-2xl font-bold text-center mb-4">Add your buisness</h2>
+          <p class="text-gray-400 text-center mb-6">Add your buisness to the local buisness directory for users to discover your buisness ! </p>
+
+          <form class="space-y-4" action="/create-buisness" method="POST">
+            <input
+              type="string"
+              name="buisnessName"
+              placeholder="Buisness Name"
+              class="w-full bg-[#252f47] text-white px-4 py-2 rounded-lg focus:ring-2 focus:ring-[#7b6ef6] focus:outline-none"
+            />
+            <select
+              name="buisnessCategory"
+              class="w-full bg-[#252f47] text-white px-4 py-2 rounded-lg focus:ring-2 focus:ring-[#7b6ef6] focus:outline-none"
+            >
+              <option value="food">Food</option>
+              <option value="drinks">Drinks</option>
+              <option value="services">Services</option>
+              <option value="shopping">Shopping</option>
+              <option value="entertainment">Entertainment</option>
+              <option value="health">Health</option>
+              
+            </select>
+
+            <input
+              type="string"
+              name="timePeriod"
+              placeholder="Buisness Hours"
+              class="w-full bg-[#252f47] text-white px-4 py-2 rounded-lg focus:ring-2 focus:ring-[#7b6ef6] focus:outline-none"
+            />
+
+            <input
+              type="string"
+              name="phoneNumber"
+              placeholder="Buisness Phone Number"
+              class="w-full bg-[#252f47] text-white px-4 py-2 rounded-lg focus:ring-2 focus:ring-[#7b6ef6] focus:outline-none"
+            />
+
+            <input
+              type="string"
+              name="buisnessAddress"
+              placeholder="Buisness Address"
+              class="w-full bg-[#252f47] text-white px-4 py-2 rounded-lg focus:ring-2 focus:ring-[#7b6ef6] focus:outline-none"
+            />
+
+            <textarea
+              type="text"
+              name="description"
+              placeholder="Describe what your buisness does"
+              class="w-full bg-[#252f47] text-white px-4 py-3 rounded-lg focus:ring-2 focus:ring-[#7b6ef6] focus:outline-none resize-y text-base placeholder-gray-400"
+            ></textarea>
+
+            <button
+              type="submit"
+              value="submit"
+              class="w-full bg-[#7b6ef6] hover:bg-[#6759d9] text-white font-semibold py-2 rounded-lg transition"
+            >
+              Add Buisness
+            </button>
+          </form>
+          
+      </div>
+      {% endif %}
     </div>
   </div>
 
   <!-- Businesses -->
   <div class="px-8 mt-10">
-    <p class="text-gray-400 mb-6">Found <span class="font-semibold text-purple-400">6</span> businesses</p>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       <!-- Card Template -->
-      <div onclick="window.location.href='/buisness-name'"  class="bg-[#12121a] rounded-2xl border border-[#2a2a3d] overflow-hidden shadow-lg hover:shadow-purple-900/40 transition business" data-type="entertainment">
+
+      {% for buisness in buisnessInfo %}
+      <div onclick="window.location.href='/business/{{ buisness.id}}'"  class="bg-[#12121a] rounded-2xl border border-[#2a2a3d] overflow-hidden shadow-lg hover:shadow-purple-900/40 transition business" data-type="{{buisness.category}}">
         <div class="relative">
           <img src="https://images.unsplash.com/photo-1505685296765-3a2736de412f?auto=format&fit=crop&w=800&q=80"
             class="w-full h-52 object-cover opacity-90 hover:opacity-100 transition" alt="">
           <span class="absolute top-3 left-3 bg-purple-600 text-xs px-3 py-1 rounded-full shadow text-white font-medium">
-            Entertainment
+            {{buisness.category}}
           </span>
           <button class="absolute top-3 right-3 bg-[#1a1a27]/70 rounded-full p-2 hover:bg-purple-700 transition text-white">
             ❤️
           </button>
         </div>
         <div class="p-5">
-          <h3 class="font-semibold text-lg text-gray-100 buisness-name">Sunset Cinema</h3>
+          <h3 class="font-semibold text-lg text-gray-100 buisness-name">{{buisness.name}}</h3>
           <div class="flex items-center text-yellow-400 text-sm mt-1">
             ★★★★★
-            <span class="text-gray-500 text-sm ml-2">0.0 (0 reviews)</span>
+            <span class="text-gray-500 text-sm ml-2">{{buisness.reviews}}</span>
           </div>
           <div class="text-gray-400 text-sm mt-3">
-            <p>📍 890 Movie Boulevard, Theater Row</p>
-            <p>📞 (555) 678-9012</p>
+            <p>📍 {{buisness.address}}</p>
+            <p>📞 {{buisness.phone}}</p>
           </div>
         </div>
       </div>
-
-      <!-- Copy this card structure for the other two below -->
-      <div class="bg-[#12121a] rounded-2xl border border-[#2a2a3d] overflow-hidden shadow-lg hover:shadow-purple-900/40 transition business" data-type="coffee">
-        <div class="relative">
-          <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80"
-            class="w-full h-52 object-cover opacity-90 hover:opacity-100 transition" alt="">
-          <span class="absolute top-3 left-3 bg-purple-600 text-xs px-3 py-1 rounded-full shadow text-white font-medium">
-            Coffee
-          </span>
-          <button class="absolute top-3 right-3 bg-[#1a1a27]/70 rounded-full p-2 hover:bg-purple-700 transition text-white">
-            ❤️
-          </button>
-        </div>
-        <div class="p-5">
-          <h3 class="font-semibold text-lg text-gray-100 buisness-name">Brew & Bean Coffee House</h3>
-          <div class="flex items-center text-yellow-400 text-sm mt-1">
-            ★★★★☆
-            <span class="text-gray-500 text-sm ml-2">4.5 (2 reviews)</span>
-          </div>
-          <div class="text-gray-400 text-sm mt-3">
-            <p>📍 456 Oak Avenue, Arts District</p>
-            <p>📞 (555) 234-5678</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-[#12121a] rounded-2xl border border-[#2a2a3d] overflow-hidden shadow-lg hover:shadow-purple-900/40 transition business" data-type="health">
-        <div class="relative">
-          <img src="https://images.unsplash.com/photo-1558611848-73f7eb4001a1?auto=format&fit=crop&w=800&q=80"
-            class="w-full h-52 object-cover opacity-90 hover:opacity-100 transition" alt="">
-          <span class="absolute top-3 left-3 bg-purple-600 text-xs px-3 py-1 rounded-full shadow text-white font-medium ">
-            Health
-          </span>
-          <button class="absolute top-3 right-3 bg-[#1a1a27]/70 rounded-full p-2 hover:bg-purple-700 transition text-white">
-            ❤️
-          </button>
-        </div>
-        <div class="p-5">
-          <h3 class="font-semibold text-lg text-gray-100 buisness-name">Elite Fitness & Wellness</h3>
-          <div class="flex items-center text-yellow-400 text-sm mt-1">
-            ★★★★☆
-            <span class="text-gray-500 text-sm ml-2">4.3 (3 reviews)</span>
-          </div>
-          <div class="text-gray-400 text-sm mt-3">
-            <p>📍 789 Fitness Lane, West Side</p>
-            <p>📞 (555) 345-6789</p>
-          </div>
-        </div>
-      </div>
+      {% endfor %}
     </div>
   </div>
 </div>
 
 <script src="{{url_for('static', filename='sortAndFilter.js')}}"></script>
+
+{% if user %}
+<script>
+  const modal = document.getElementById("createBuisness-modal");
+  const openModalBtn = document.getElementById("createBuisnessBtn");
+  const closeModalBtn = document.getElementById("closeBuisnessModalBtn");
+
+  openModalBtn.addEventListener("click", () => {
+    modal.classList.remove("hidden");
+  });
+
+  closeModalBtn.addEventListener("click", () => {
+    modal.classList.add("hidden");
+  });
+
+  window.addEventListener("click", (e) => {
+    if (e.target === modal) modal.classList.add("hidden");
+  });
+</script>
+{% endif %}
+
 {% endblock %}

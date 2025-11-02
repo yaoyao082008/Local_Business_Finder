@@ -7,7 +7,9 @@ db.init_db(app)
 
 @app.route("/")
 def home():
-    return render_template("index.html", user=session.get("user"))
+    buisnesses = db.Buisness.query.all()
+    print(buisnesses[0].address)
+    return render_template("index.html", user=session.get("user"), buisnessInfo = buisnesses)
 
 @app.route("/signout")
 def signout():
@@ -23,6 +25,21 @@ def loginUserPost():
     print(user)
     session["user"] = user
     return redirect("/")
+
+@app.route("/create-buisness",methods=["POST"])
+def createBuisness():
+    name = request.form.get("buisnessName")
+    category = request.form.get("buisnessCategory")
+    timePeriod = request.form.get("timePeriod")
+    cell = request.form.get("phoneNumber")
+    description = request.form.get("description")
+    category = request.form.get("buisnessCategory")
+    address =  request.form.get("buisnessAddress")
+
+    db.create_buisness(name=name, category=category,times=timePeriod,phone=cell,description=description,address=address)
+
+    return redirect("/")
+
 
 @app.route("/register")
 def register():
@@ -43,9 +60,10 @@ def register_user_post():
 
 
 
-@app.route("/buisness-name")
-def buisnessName():
-    return render_template("sunsetCinema.html", user=session.get("user"))
+@app.route("/business/<int:id>")
+def buisnessesPage(id):
+    buisnessInfo = db.Buisness.query.get_or_404(id)
+    return render_template("post.html", user=session.get("user"), buisnessInfo = buisnessInfo)
 
 if __name__ == "__main__":
     app.run(debug=True)
