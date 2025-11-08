@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}Account Settings{% endblock %}
+
+{% block body %}
+<div class="flex justify-center items-center min-h-screen bg-[#0f1624] text-white">
+  <div class="bg-[#121a26] p-8 rounded-2xl shadow-lg w-[30rem] border border-[#1c2636]">
+    <h2 class="text-2xl font-bold text-center mb-6">Account Settings</h2>
+
+    <!-- Tabs -->
+    <div class="flex justify-around mb-6 border-b border-gray-700">
+      <button class="tab-btn py-2 px-4 text-sm font-semibold text-gray-300 border-b-2 border-transparent hover:text-white hover:border-[#7b6ef6]" data-tab="bookmarks">Bookmarks</button>
+      <button class="tab-btn py-2 px-4 text-sm font-semibold text-gray-300 border-b-2 border-transparent hover:text-white hover:border-[#7b6ef6]" data-tab="reviews">Previous Reviews</button>
+      <button class="tab-btn py-2 px-4 text-sm font-semibold text-gray-300 border-b-2 border-transparent hover:text-white hover:border-[#7b6ef6]" data-tab="password">Change Password</button>
+    </div>
+
+    <!-- Bookmarks -->
+    <div id="bookmarks" class="tab-content">
+      <h3 class="text-lg font-semibold mb-3">Your Bookmarks</h3>
+      <p class="text-gray-400 text-sm">You haven’t bookmarked any businesses yet.</p>
+    </div>
+
+    <!-- Reviews -->
+    <div id="reviews" class="tab-content hidden">
+      <h3 class="text-lg font-semibold mb-3">Your Previous Reviews</h3>
+      <p class="text-gray-400 text-sm">You haven’t written any reviews yet.</p>
+    </div>
+
+    <!-- Change Password -->
+    <div id="password" class="tab-content hidden">
+      <form id="passwordForm" method="POST" class="space-y-4">
+        <div>
+          <label class="block mb-1 text-sm font-medium">Current Password</label>
+          <input
+            name="current_password"
+            type="password"
+            class="w-full px-3 py-2 bg-[#0f1624] border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7b6ef6]"
+            required
+          />
+        </div>
+
+        <div>
+          <label class="block mb-1 text-sm font-medium">New Password</label>
+          <input
+            name="new_password"
+            type="password"
+            class="w-full px-3 py-2 bg-[#0f1624] border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7b6ef6]"
+            required
+          />
+        </div>
+
+        <div>
+          <label class="block mb-1 text-sm font-medium">Confirm New Password</label>
+          <input
+            name="confirm_new_password"
+            type="password"
+            class="w-full px-3 py-2 bg-[#0f1624] border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7b6ef6]"
+            required
+          />
+        </div>
+
+        <p id="errorMsg" class="text-red-500 text-sm text-center hidden"></p>
+        <p id="successMsg" class="text-green-500 text-sm text-center hidden">Password updated successfully!</p>
+
+        <button
+          type="submit"
+          class="w-full bg-[#7b6ef6] hover:bg-[#6759d9] text-white font-semibold py-2 rounded-lg transition"
+        >
+          Update Password
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Tab switching logic
+  const tabs = document.querySelectorAll(".tab-btn");
+  const contents = document.querySelectorAll(".tab-content");
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      contents.forEach((c) => c.classList.add("hidden"));
+      tabs.forEach((t) => t.classList.remove("text-white", "border-[#7b6ef6]"));
+      const target = document.getElementById(tab.dataset.tab);
+      target.classList.remove("hidden");
+      tab.classList.add("text-white", "border-[#7b6ef6]");
+    });
+  });
+
+  const actualPassword = "{{ user.password }}";
+
+  // Password form validation
+  document.getElementById("passwordForm").addEventListener("submit", function (e) {
+    const currentPassword = document.querySelector("[name='current_password']").value;
+    const newPassword = document.querySelector("[name='new_password']").value;
+    const confirmPassword = document.querySelector("[name='confirm_new_password']").value;
+    const errorMsg = document.getElementById("errorMsg");
+    const successMsg = document.getElementById("successMsg");
+
+    if (currentPassword !== actualPassword) {
+      e.preventDefault();
+      errorMsg.textContent = "Current password is incorrect.";
+      errorMsg.classList.remove("hidden");
+      successMsg.classList.add("hidden");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      e.preventDefault();
+      errorMsg.textContent = "New passwords do not match.";
+      errorMsg.classList.remove("hidden");
+      successMsg.classList.add("hidden");
+      return;
+    }
+
+    errorMsg.classList.add("hidden");
+    successMsg.classList.remove("hidden");
+  });
+</script>
+{% endblock %}

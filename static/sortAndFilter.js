@@ -42,13 +42,13 @@ function searchBusinesses() {
 
     
     for (i = 0; i < cards.length; i++) {
-        var buisnessName = cards[i].getElementsByClassName("buisness-name")[0].innerText.toLowerCase();
+        var businessName = cards[i].getElementsByClassName("business-name")[0].innerText.toLowerCase();
         var type = cards[i].getAttribute('data-type')
 
         console.log(activeFilter)
         console.log(type)
 
-        if (buisnessName.indexOf(searchValue)==-1){
+        if (businessName.indexOf(searchValue)==-1){
             cards[i].classList.add('hidden') 
         }else{
 

@@ -21,33 +21,37 @@
       <div class="relative">
         <img src="https://images.unsplash.com/photo-1524985069026-dd778a71c7b4" alt="Cinema" class="w-full h-64 object-cover">
         <div class="absolute top-4 right-4 bg-black text-white text-sm px-3 py-1 rounded-lg">
-          {{buisnessInfo.category}}
+          {{businessInfos.category}}
         </div>
       </div>
       <div class="p-6">
-        <h1 class="text-2xl font-semibold text-gray-900 mb-2">{{buisnessInfo.name}}</h1>
+        <h1 class="text-2xl font-semibold text-gray-900 mb-2">{{businessInfos.name}}</h1>
 
         <div class="flex items-center space-x-1 mb-1">
           <div class="flex text-gray-300">
             <svg class="w-5 h-5" fill="currentColor"><path d="M9.049 2.927..."/></svg>
           </div>
-          <p class="text-sm text-gray-500">{{buisnessInfo.rating}}</p>
+          <div class="flex" id="business-stars">
+            <!-- stars will be inserted dynamically -->
+          </div>
+          <!-- <p class="text-sm text-gray-500">{{businessInfos.rating}}</p> -->
         </div>
 
-        <p class="flex items-center space-x-2 py-1">
-          <span class="text-black">📝 {{buisnessInfo.description}}</span>
-        </p>
-
+        <div class="space-y-2 text-left">
+          <p class="flex space-x-2 py-1">
+            <span class="text-black">📝 {{businessInfos.description}}</span>
+          </p>
+        </div>
         <div class="space-y-2 text-gray-700 text-sm">
           <p class="flex items-center space-x-2">
-            <span>📍{{buisnessInfo.address}}</span>
+            <span>📍{{businessInfos.address}}</span>
           </p>
           <p class="flex items-center space-x-2">
             
-            <span>📞 {{buisnessInfo.phone}}</span>
+            <span>📞 {{businessInfos.phone}}</span>
           </p>
           <p class="flex items-center space-x-2">
-            <span>⏰ {{buisnessInfo.times}}</span>
+            <span>⏰ {{businessInfos.times}}</span>
           </p>
         </div>
       </div>
@@ -59,31 +63,123 @@
         {% if user %}
         <p class="text-sm text-gray-500 mb-2">Signed in as <strong>{{user.username}}</strong></p>
         {% endif %}
-        <div class="mb-3">
-            <label class="text-sm font-medium text-gray-700">Rating</label>
-            <div id="stars" class="flex justify-left space-x-2 cursor-pointer">
-            <!-- Stars will be here -->
-                <svg data-value="1" xmlns="http://www.w3.org/2000/svg" class="star w-10 h-10 text-gray-300 hover:text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.966a1 1 0 00.95.69h4.18c.969 0 1.371 1.24.588 1.81l-3.385 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.538 1.118l-3.385-2.455a1 1 0 00-1.176 0l-3.385 2.455c-.783.57-1.838-.196-1.538-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.045 9.393c-.783-.57-.38-1.81.588-1.81h4.18a1 1 0 00.95-.69l1.286-3.966z"/></svg>
-                <svg data-value="2" xmlns="http://www.w3.org/2000/svg" class="star w-10 h-10 text-gray-300 hover:text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.966a1 1 0 00.95.69h4.18c.969 0 1.371 1.24.588 1.81l-3.385 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.538 1.118l-3.385-2.455a1 1 0 00-1.176 0l-3.385 2.455c-.783.57-1.838-.196-1.538-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.045 9.393c-.783-.57-.38-1.81.588-1.81h4.18a1 1 0 00.95-.69l1.286-3.966z"/></svg>
-                <svg data-value="3" xmlns="http://www.w3.org/2000/svg" class="star w-10 h-10 text-gray-300 hover:text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.966a1 1 0 00.95.69h4.18c.969 0 1.371 1.24.588 1.81l-3.385 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.538 1.118l-3.385-2.455a1 1 0 00-1.176 0l-3.385 2.455c-.783.57-1.838-.196-1.538-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.045 9.393c-.783-.57-.38-1.81.588-1.81h4.18a1 1 0 00.95-.69l1.286-3.966z"/></svg>
-                <svg data-value="4" xmlns="http://www.w3.org/2000/svg" class="star w-10 h-10 text-gray-300 hover:text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.966a1 1 0 00.95.69h4.18c.969 0 1.371 1.24.588 1.81l-3.385 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.538 1.118l-3.385-2.455a1 1 0 00-1.176 0l-3.385 2.455c-.783.57-1.838-.196-1.538-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.045 9.393c-.783-.57-.38-1.81.588-1.81h4.18a1 1 0 00.95-.69l1.286-3.966z"/></svg>
-                <svg data-value="5" xmlns="http://www.w3.org/2000/svg" class="star w-10 h-10 text-gray-300 hover:text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.966a1 1 0 00.95.69h4.18c.969 0 1.371 1.24.588 1.81l-3.385 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.538 1.118l-3.385-2.455a1 1 0 00-1.176 0l-3.385 2.455c-.783.57-1.838-.196-1.538-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.045 9.393c-.783-.57-.38-1.81.588-1.81h4.18a1 1 0 00.95-.69l1.286-3.966z"/></svg>
+
+        {% if user %}
+        <form action="/submit-review" method="POST">
+            <div class="mb-3">
+              <label class="text-sm font-medium text-gray-700">Rating</label>
+              <select id="rating" name="numStars" class=" text-black border border-gray-300 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-yellow-400">
+                <option value="0">0 stars</option>
+                <option value="1">1 star</option>
+                <option value="2">2 stars</option>
+                <option value="3">3 stars</option>
+                <option value="4">4 stars</option>
+                <option value="5">5 stars</option>
+              </select>
+
+              <div id="stars" class="flex justify-left space-x-2 cursor-pointer">
+                <svg data-value="1" xmlns="http://www.w3.org/2000/svg" class="star w-10 h-10 text-gray-300" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.966a1 1 0 00.95.69h4.18c.969 0 1.371 1.24.588 1.81l-3.385 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.538 1.118l-3.385-2.455a1 1 0 00-1.176 0l-3.385 2.455c-.783.57-1.838-.196-1.538-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.045 9.393c-.783-.57-.38-1.81.588-1.81h4.18a1 1 0 00.95-.69l1.286-3.966z"/></svg>
+                <svg data-value="2" xmlns="http://www.w3.org/2000/svg" class="star w-10 h-10 text-gray-300" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.966a1 1 0 00.95.69h4.18c.969 0 1.371 1.24.588 1.81l-3.385 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.538 1.118l-3.385-2.455a1 1 0 00-1.176 0l-3.385 2.455c-.783.57-1.838-.196-1.538-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.045 9.393c-.783-.57-.38-1.81.588-1.81h4.18a1 1 0 00.95-.69l1.286-3.966z"/></svg>
+                <svg data-value="3" xmlns="http://www.w3.org/2000/svg" class="star w-10 h-10 text-gray-300" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.966a1 1 0 00.95.69h4.18c.969 0 1.371 1.24.588 1.81l-3.385 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.538 1.118l-3.385-2.455a1 1 0 00-1.176 0l-3.385 2.455c-.783.57-1.838-.196-1.538-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.045 9.393c-.783-.57-.38-1.81.588-1.81h4.18a1 1 0 00.95-.69l1.286-3.966z"/></svg>
+                <svg data-value="4" xmlns="http://www.w3.org/2000/svg" class="star w-10 h-10 text-gray-300" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.966a1 1 0 00.95.69h4.18c.969 0 1.371 1.24.588 1.81l-3.385 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.538 1.118l-3.385-2.455a1 1 0 00-1.176 0l-3.385 2.455c-.783.57-1.838-.196-1.538-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.045 9.393c-.783-.57-.38-1.81.588-1.81h4.18a1 1 0 00.95-.69l1.286-3.966z"/></svg>
+                <svg data-value="5" xmlns="http://www.w3.org/2000/svg" class="star w-10 h-10 text-gray-300" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.966a1 1 0 00.95.69h4.18c.969 0 1.371 1.24.588 1.81l-3.385 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.538 1.118l-3.385-2.455a1 1 0 00-1.176 0l-3.385 2.455c-.783.57-1.838-.196-1.538-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.045 9.393c-.783-.57-.38-1.81.588-1.81h4.18a1 1 0 00.95-.69l1.286-3.966z"/></svg>
+              </div>
             </div>
-        </div>
-
-      <textarea placeholder="Share your experience..." class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-purple-400 focus:outline-none mb-3 text-black placeholder-gray-500"></textarea>
-
-      <button class="w-full bg-gradient-to-r from-purple-400 to-indigo-500 text-white font-medium py-2 rounded-lg hover:opacity-90">
-        Submit Review
-      </button>
+          <textarea name="reviewDescription" placeholder="Share your experience..." class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-purple-400 focus:outline-none mb-3 text-black placeholder-gray-500"></textarea>
+          <input type="hidden" name="businessName" value="{{businessInfos.name}}">
+          <input type="hidden" name="username" value="{{user.username}}">
+          <button type="submit" value="submit" class="w-full bg-gradient-to-r from-purple-400 to-indigo-500 text-white font-medium py-2 rounded-lg hover:opacity-90">
+            Submit Review
+          </button>
+        </form>
+        {% else %}
+        <button id="openModalBtn2" class="w-full bg-gradient-to-r from-purple-400 to-indigo-500 text-white font-medium py-2 rounded-lg hover:opacity-90">
+          Sign In
+        </button>
+        {% endif %}
     </div>
 
     <!-- Customer Reviews -->
     <div class="bg-white shadow rounded-2xl p-6">
-      <h2 class="text-lg font-semibold text-gray-900 mb-2">Customer Reviews 0</h2>
-      <p class="text-sm text-black">{{buisnessInfo.reviews}}</p>
+      <h2 class="text-lg font-semibold text-gray-900 mb-2 py-3">Customer Reviews {{reviews|length}}</h2>
+
+      {% for reviewer,attributes in reviews.items() %}
+        <div class="max-w-2xl w-full bg-white shadow-md rounded-2xl p-5 flex flex-col gap-3 border border-gray-100 my-2 ">
+          <div class="flex justify-between items-start">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-lg font-bold">
+                <span>👤</span>
+              </div>
+              <div>
+                <p class="font-semibold text-gray-900" id="reviewer-name">{{reviewer}}</p>
+                <!-- <p class="text-sm text-gray-500" id="review-date">Oct 30, 2025</p> -->
+              </div>
+            </div>
+            <div class="flex" id="star-container">
+              {% for star in range(attributes[0]) %}
+              <span class="text-yellow-400">★</span>
+              {% endfor %}
+              <!-- stars will be inserted dynamically -->
+            </div>
+          </div>
+          <p class="text-gray-700 leading-relaxed" id="review-text">
+            {{attributes[1]}}
+          </p>
+        </div>
+      {% endfor %}
     </div>
   </div>
 </body>
 
+<script>
+  const select = document.getElementById("rating");
+  const stars = document.querySelectorAll(".star");
+
+  select.addEventListener("change", () => {
+    const value = parseInt(select.value);
+    stars.forEach((star, index) => {
+      if (index < value) {
+        star.classList.add("text-yellow-400");
+        star.classList.remove("text-gray-300");
+      } else {
+        star.classList.add("text-gray-300");
+        star.classList.remove("text-yellow-400");
+      }
+    });
+  });
+</script>
+
+<script>
+  const businessStar = document.getElementById("business-stars")
+  const fullStar = `<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-5 h-5 text-yellow-400" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.13 3.47a1 1 0 00.95.69h3.641c.969 0 1.372 1.24.588 1.81l-2.947 2.14a1 1 0 00-.364 1.118l1.13 3.47c.3.921-.755 1.688-1.54 1.118l-2.947-2.14a1 1 0 00-1.176 0l-2.947 2.14c-.784.57-1.838-.197-1.539-1.118l1.13-3.47a1 1 0 00-.364-1.118L2.74 8.897c-.784-.57-.38-1.81.588-1.81h3.64a1 1 0 00.951-.69l1.13-3.47z"/></svg>`;
+  const emptyStar = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" class="w-5 h-5 text-yellow-400" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927l1.902 5.847h6.162l-4.981 3.62 1.902 5.847-4.981-3.62-4.981 3.62 1.902-5.847-4.981-3.62h6.162z"/></svg>`;
+  businessRating = {{rating}}
+  for (let i = 1; i <= 5; i++) {
+    businessStar.innerHTML += i <= businessRating ? fullStar : emptyStar;
+  }
+</script>
+
+
+<script>
+  const modal = document.getElementById("signin-modal");
+  const openModalBtn2 = document.getElementById("openModalBtn2");
+  const closeModalBtn = document.getElementById("closeModalBtn");
+  const openModalBtn = document.getElementById("openModalBtn");
+
+  openModalBtn.addEventListener("click", () => {
+    modal.classList.remove("hidden");
+  });
+
+  openModalBtn2.addEventListener("click", () => {
+    modal.classList.remove("hidden");
+  });
+
+  closeModalBtn.addEventListener("click", () => {
+    modal.classList.add("hidden");
+  });
+
+  window.addEventListener("click", (e) => {
+    if (e.target === modal) modal.classList.add("hidden");
+  });
+</script>
 {%endblock%}

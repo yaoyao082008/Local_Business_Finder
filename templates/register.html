@@ -4,15 +4,19 @@
 
 {% block body %}
 <div class="flex justify-center items-center min-h-screen bg-[#0f1624] text-white">
-  <div class="bg-[#121a26] p-8 rounded-2xl shadow-lg w-96 border border-[#1c2636]">
+  <div class="bg-[#121a26] p-8 rounded-2xl shadow-lg w-96 border border-[#1c2636] relative">
     <h2 class="text-2xl font-bold text-center mb-6">Create Account</h2>
-
     <form id="registerForm" class="space-y-4" action="/register-user-post" method="post">
+      <img src="data:image/jpeg;base64, {{ captcha.img }}" alt="captcha" class="simple-captcha-img"/>
+      <div>
+        <label class="block mb-1 text-sm font-medium">Enter CAPTCHA</label>
+        <input type="text" class="w-full px-3 py-2 bg-[#0f1624] border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7b6ef6]" id="captcha-text" name="captcha-text">
+        <input type="hidden" class="w-full px-3 py-2 bg-[#0f1624] border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7b6ef6]" id="captcha-hash" name="captcha-hash" value="{{ captcha.hash }}">
       <!-- Username -->
       <div>
         <label class="block mb-1 text-sm font-medium">Username</label>
         <input
-          name = "username"
+          name="username"
           type="text"
           class="w-full px-3 py-2 bg-[#0f1624] border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7b6ef6]"
           required
@@ -23,7 +27,7 @@
       <div>
         <label class="block mb-1 text-sm font-medium">Password</label>
         <input
-          name = "password"
+          name="password"
           type="password"
           class="w-full px-3 py-2 bg-[#0f1624] border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7b6ef6]"
           required
@@ -41,13 +45,17 @@
         />
       </div>
 
-      <!-- Error Message -->
-      <p id="errorMsg" class="text-red-500 text-sm text-center hidden">Passwords do not match.</p>
+      <!-- Error Message Popup -->
+      <div
+        id="errorPopup"
+        class="hidden absolute top-4 left-1/2 transform -translate-x-1/2 bg-red-600 text-white text-sm px-4 py-2 rounded-lg shadow-lg animate-slide-down"
+      >
+        ⚠️ Passwords do not match.
+      </div>
 
       <!-- Submit -->
       <button
         type="submit"
-        value="submmit"
         class="w-full bg-[#7b6ef6] hover:bg-[#6759d9] text-white font-semibold py-2 rounded-lg transition"
       >
         Register
@@ -56,36 +64,41 @@
   </div>
 </div>
 
-<script type="module">
-  // Handle registration
-  const registerForm = document.getElementById('registerForm');
-  const errorMsg = document.getElementById('errorMsg');
+<!-- Tailwind animation for smooth popup -->
+<style>
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -10px);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+  }
+  .animate-slide-down {
+    animation: slideDown 0.3s ease-out;
+  }
+</style>
 
-  // registerForm.addEventListener('submit', async (e) => {
-  //   e.preventDefault();
+<!-- Validation Script -->
+<script>
+  const form = document.getElementById("registerForm");
+  const errorPopup = document.getElementById("errorPopup");
 
-  //   const firstName = document.getElementById('firstName').value.trim();
-  //   const lastName = document.getElementById('lastName').value.trim();
-  //   const username = document.getElementById('username').value.trim();
-  //   const password = document.getElementById('password').value;
-  //   const confirmPassword = document.getElementById('confirmPassword').value;
+  form.addEventListener("submit", function (e) {
+    const password = form.password.value.trim();
+    const confirmPassword = form.confirmPassword.value.trim();
 
-  //   // Input validation
-  //   if (!/^[A-Za-z]+$/.test(firstName) || !/^[A-Za-z]+$/.test(lastName)) {
-  //     errorMsg.textContent = "Names can only contain letters.";
-  //     errorMsg.classList.remove('hidden');
-  //     return;
-  //   }
+    if (password !== confirmPassword) {
+      e.preventDefault(); // stop form submission
+      errorPopup.classList.remove("hidden");
 
-  //   if (password !== confirmPassword) {
-  //     errorMsg.textContent = "Passwords do not match.";
-  //     errorMsg.classList.remove('hidden');
-  //     return;
-  //   }
-
-  //   // Hide error
-  //   errorMsg.classList.add('hidden');
-  //   window.location.href = "/";
-  // });
+      // Hide popup after 3 seconds
+      setTimeout(() => {
+        errorPopup.classList.add("hidden");
+      }, 3000);
+    }
+  });
 </script>
 {% endblock %}
