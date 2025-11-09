@@ -10,9 +10,7 @@
   <body class="bg-[#0f1624] text-white">
     <!-- Navbar -->
     <nav class="flex items-center justify-between px-6 py-3 bg-[#121a26] border-b border-[#1c2636]">
-      <!-- Left Section -->
       <div class="flex items-center space-x-8">
-        <!-- Logo -->
         <a href="/">
           <div class="flex items-center space-x-2 cursor-pointer">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#7b6ef6" class="w-8 h-8">
@@ -22,135 +20,139 @@
           </div>
         </a>
 
-        <!-- Nav Links -->
-        <div class="flex space-x-6">
-          <a href="#" class="text-gray-300 hover:text-white font-medium">Team</a>
-          <a href="#" class="text-gray-300 hover:text-white font-medium">Projects</a>
-          <a href="#" class="text-gray-300 hover:text-white font-medium">Calendar</a>
-        </div>
       </div>
 
-      <!-- Right Section -->
       <div class="flex items-center space-x-4">
         {% if not user %}
         <button
-        id="openModalBtn"
-        class="bg-[#7b6ef6] text-white font-semibold px-4 py-2 rounded-xl hover:bg-[#6759d9] transition"
+          id="openModalBtn"
+          class="bg-[#7b6ef6] text-white font-semibold px-4 py-2 rounded-xl hover:bg-[#6759d9] transition"
         >
-        Sign In
+          Sign In
         </button>
         {% else %}
-
-        <div class=" relative inline-block text-left dropdown">
+        <div class="relative inline-block text-left dropdown">
           <span class="rounded-md shadow-sm">
-            <button   class="bg-[#7b6ef6] text-white font-semibold px-4 py-2 rounded-xl hover:bg-[#6759d9] transition"
-              type="button" aria-haspopup="true" aria-expanded="true" aria-controls="headlessui-menu-items-117">
-
+            <button class="bg-[#7b6ef6] text-white font-semibold px-4 py-2 rounded-xl hover:bg-[#6759d9] transition"
+              type="button">
               <span>Account</span>
             </button>
           </span>
           <div class="hidden dropdown-menu">
-            <div class="absolute right-0 w-56 mt-2 origin-top-right bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg outline-none" aria-labelledby="headlessui-menu-button-1" id="headlessui-menu-items-117" role="menu">
+            <div
+              class="absolute right-0 w-56 mt-2 origin-top-right bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg outline-none">
               <div class="px-4 py-3">
-                <p class="text-sm text-black leading-5">Signed in as <strong>{{user.username}}</strong></p>
+                <p class="text-sm text-black leading-5">Signed in as <strong>{{ user.username }}</strong></p>
               </div>
               <div class="py-1">
-                <a href="/accountsettings" class="text-gray-700 flex justify-between w-full px-4 py-2 text-sm leading-5 text-left"  role="menuitem" >Account Settings</a>
+                <a href="/accountsettings"
+                   class="text-gray-700 flex justify-between w-full px-4 py-2 text-sm leading-5 text-left"
+                   role="menuitem">Account Settings</a>
+              </div>
               <div class="py-1">
-                <a href="/signout" class="text-gray-700 flex justify-between w-full px-4 py-2 text-sm leading-5 text-left"  role="menuitem" >Sign out</a></div>
+                <a href="/signout"
+                   class="text-gray-700 flex justify-between w-full px-4 py-2 text-sm leading-5 text-left"
+                   role="menuitem">Sign out</a>
+              </div>
             </div>
           </div>
         </div>
         {% endif %}
-        
       </div>
     </nav>
-    
+
     {% if not user %}
     <!-- Sign In Modal -->
-    <div
-      id="signin-modal"
-      class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"
-    >
+    <div id="signin-modal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
       <div class="bg-[#1a2234] rounded-2xl shadow-xl w-full max-w-md mx-4 p-8 relative">
-        <!-- Close button -->
         <button id="closeModalBtn" class="absolute top-3 right-3 text-gray-400 hover:text-white text-2xl">
           &times;
         </button>
 
-        <!-- Modal content -->
         <h2 class="text-2xl font-bold text-center mb-4">Sign In</h2>
         <p class="text-gray-400 text-center mb-6">Access your account to manage your business and leave reviews!</p>
 
         <form class="space-y-4" action="/login-user-post" method="POST">
-          <img src="data:image/jpeg;base64, {{ captcha.img }}" alt="captcha" class="simple-captcha-img"/>
+          <img src="data:image/jpeg;base64, {{ captcha.img }}" alt="captcha" class="simple-captcha-img" />
           <label class="block mb-1 text-sm font-medium">Enter CAPTCHA</label>
-          <input type="text" class="w-full px-3 py-2 bg-[#0f1624] border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7b6ef6]" id="captcha-text" name="captcha-text">
-          <input type="hidden" class="w-full px-3 py-2 bg-[#0f1624] border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7b6ef6]" id="captcha-hash" name="captcha-hash" value="{{ captcha.hash }}">
-          <input
-            type="string"
-            name="username"
-            placeholder="Username"
-            class="w-full bg-[#252f47] text-white px-4 py-2 rounded-lg focus:ring-2 focus:ring-[#7b6ef6] focus:outline-none"
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            class="w-full bg-[#252f47] text-white px-4 py-2 rounded-lg focus:ring-2 focus:ring-[#7b6ef6] focus:outline-none"
-          />
+          <input type="text"
+                 class="w-full px-3 py-2 bg-[#0f1624] border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7b6ef6]"
+                 id="captcha-text" name="captcha-text">
+          <input type="hidden" id="captcha-hash" name="captcha-hash" value="{{ captcha.hash }}">
+          
+          <!-- Preserve previous username -->
+          <input type="string" name="username" placeholder="Username"
+                 value="{{ prev_username if prev_username else '' }}"
+                 class="w-full bg-[#252f47] text-white px-4 py-2 rounded-lg focus:ring-2 focus:ring-[#7b6ef6] focus:outline-none" />
 
-          <button
-            type="submit"
-            value="submit"
-            class="w-full bg-[#7b6ef6] hover:bg-[#6759d9] text-white font-semibold py-2 rounded-lg transition"
-          >
+          <input type="password" name="password" placeholder="Password"
+                 class="w-full bg-[#252f47] text-white px-4 py-2 rounded-lg focus:ring-2 focus:ring-[#7b6ef6] focus:outline-none" />
+
+          <button type="submit"
+                  class="w-full bg-[#7b6ef6] hover:bg-[#6759d9] text-white font-semibold py-2 rounded-lg transition">
             Sign In
           </button>
         </form>
-        
-        <!-- Divider -->
+
         <div class="flex items-center my-6">
           <hr class="flex-grow border-gray-700" />
           <span class="px-3 text-gray-500 text-sm">or</span>
           <hr class="flex-grow border-gray-700" />
-        </div>      
-      <p class="text-center text-gray-400 mt-6">
-        Don’t have an account?
-        <a href="/register" class="text-[#7b6ef6] hover:underline">Register</a>
-      </p>
+        </div>
+        <p class="text-center text-gray-400 mt-6">
+          Don’t have an account?
+          <a href="/register" class="text-[#7b6ef6] hover:underline">Register</a>
+        </p>
+      </div>
     </div>
-  </div>
-  {% endif %}
+    {% endif %}
 
-  {% block body %}
-  {% endblock %}
+    {% if error %}
+    <!-- Error Popup -->
+    <div id="errorPopup"
+         class="fixed top-6 right-6 bg-red-600 text-white text-sm px-5 py-3 rounded-lg shadow-lg transform transition-all duration-500 opacity-0 z-[9999]">
+      {{ message }}
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const popup = document.getElementById("errorPopup");
+        if (popup) {
+          popup.classList.remove("opacity-0");
+        }
+      });
+    </script>
+    {% endif %}
+
+    {% if show_modal %}
+    <!-- Reopen modal automatically if login failed -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const modal = document.getElementById("signin-modal");
+        if (modal) modal.classList.remove("hidden");
+      });
+    </script>
+    {% endif %}
+
+    {% block body %}{% endblock %}
+
     <style>
-    .dropdown:focus-within .dropdown-menu {
-      display:block;
-    }
+      .dropdown:focus-within .dropdown-menu {
+        display: block;
+      }
     </style>
-  
-    <!-- Scripts -->
-
 
     <script>
       const modal = document.getElementById("signin-modal");
       const openModalBtn = document.getElementById("openModalBtn");
       const closeModalBtn = document.getElementById("closeModalBtn");
 
-      openModalBtn.addEventListener("click", () => {
-        modal.classList.remove("hidden");
-      });
-
-      closeModalBtn.addEventListener("click", () => {
-        modal.classList.add("hidden");
-      });
-
-      window.addEventListener("click", (e) => {
-        if (e.target === modal) modal.classList.add("hidden");
-      });
+      if (openModalBtn && modal && closeModalBtn) {
+        openModalBtn.addEventListener("click", () => modal.classList.remove("hidden"));
+        closeModalBtn.addEventListener("click", () => modal.classList.add("hidden"));
+        window.addEventListener("click", (e) => {
+          if (e.target === modal) modal.classList.add("hidden");
+        });
+      }
     </script>
-
   </body>
 </html>

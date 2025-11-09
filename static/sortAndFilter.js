@@ -33,6 +33,7 @@ function filterBusinesses(type, button) {
     }
 
     activeFilter = type
+    filterOptions()
 }
 
 function searchBusinesses() {
@@ -58,4 +59,47 @@ function searchBusinesses() {
             
         }
     }
+
+    filterOptions()
+}
+
+function filterOptions(){
+
+    let filterOption = document.getElementById("sortOption").value
+
+    console.log(filterOption)
+
+
+    const container = document.getElementById("business-container");
+
+    // Get all card elements as an array
+    const cards = Array.from(container.querySelectorAll(".business"));
+
+    if (filterOption === "highestRating"){
+        // Sort them by data-rating (descending)
+        cards.sort((a, b) => b.dataset.rating - a.dataset.rating);
+
+        // Re-append them in new order
+        cards.forEach(card => container.appendChild(card));
+    }
+
+    if (filterOption === "lowestRating"){
+        // Sort them by data-rating (descending)
+        cards.sort((a, b) => a.dataset.rating - b.dataset.rating);
+
+        // Re-append them in new order
+        cards.forEach(card => container.appendChild(card));
+    }
+
+    if (filterOption === "favorites"){
+
+        console.log("hello")
+        // Sort them by data-rating (descending)
+        cards.sort((a, b) => b.dataset.favorite - a.dataset.favorite);
+
+        // Re-append them in new order
+        cards.forEach(card => container.appendChild(card));
+    }
+    
+
 }

@@ -6,18 +6,43 @@
 <div class="flex justify-center items-center min-h-screen bg-[#0f1624] text-white">
   <div class="bg-[#121a26] p-8 rounded-2xl shadow-lg w-96 border border-[#1c2636] relative">
     <h2 class="text-2xl font-bold text-center mb-6">Create Account</h2>
+
+    <!-- Server-rendered error popup (same style as main page) -->
+    {% if error %}
+    <div id="errorPopup"
+         class="fixed top-6 right-6 bg-red-600 text-white text-sm px-5 py-3 rounded-lg shadow-lg transform transition-all duration-500 opacity-0 z-[9999]">
+      {{ message }}
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const popup = document.getElementById("errorPopup");
+        if (popup) {
+          // show popup and leave it visible until user navigates/changes form
+          popup.classList.remove("opacity-0");
+        }
+      });
+    </script>
+    {% endif %}
+
     <form id="registerForm" class="space-y-4" action="/register" method="post">
       <img src="data:image/jpeg;base64, {{ captcha.img }}" alt="captcha" class="simple-captcha-img"/>
       <div>
         <label class="block mb-1 text-sm font-medium">Enter CAPTCHA</label>
-        <input type="text" class="w-full px-3 py-2 bg-[#0f1624] border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7b6ef6]" id="captcha-text" name="captcha-text">
-        <input type="hidden" class="w-full px-3 py-2 bg-[#0f1624] border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7b6ef6]" id="captcha-hash" name="captcha-hash" value="{{ captcha.hash }}">
+        <input type="text"
+               class="w-full px-3 py-2 bg-[#0f1624] border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7b6ef6]"
+               id="captcha-text" name="captcha-text"
+               value="{{ request.form.get('captcha-text','') }}"
+        >
+        <input type="hidden" id="captcha-hash" name="captcha-hash" value="{{ captcha.hash }}">
+      </div>
+
       <!-- Username -->
       <div>
         <label class="block mb-1 text-sm font-medium">Username</label>
         <input
           name="username"
           type="text"
+          value="{{ prev_username if prev_username else '' }}"
           class="w-full px-3 py-2 bg-[#0f1624] border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7b6ef6]"
           required
         />
@@ -45,9 +70,9 @@
         />
       </div>
 
-      <!-- Error Message Popup -->
+      <!-- Client-side fallback error popup for password mismatch (keeps UX snappy) -->
       <div
-        id="errorPopup"
+        id="clientError"
         class="hidden absolute top-4 left-1/2 transform -translate-x-1/2 bg-red-600 text-white text-sm px-4 py-2 rounded-lg shadow-lg animate-slide-down"
       >
         ⚠️ Passwords do not match.
@@ -81,28 +106,22 @@
   }
 </style>
 
-<!-- Validation Script -->
+<!-- Client-side validation (optional — server enforces everything) -->
 <script>
   const form = document.getElementById("registerForm");
-  const errorPopup = document.getElementById("errorPopup");
+  const clientError = document.getElementById("clientError");
 
   form.addEventListener("submit", function (e) {
     const password = form.password.value.trim();
     const confirmPassword = form.confirmPassword.value.trim();
 
     if (password !== confirmPassword) {
-      e.preventDefault(); // stop form submission
-      errorPopup.classList.remove("hidden");
-
-      // Hide popup after 3 seconds
-      setTimeout(() => {
-        errorPopup.classList.add("hidden");
-      }, 3000);
+      e.preventDefault();
+      clientError.classList.remove("hidden");
+      setTimeout(() => clientError.classList.add("hidden"), 3000);
+      return;
     }
-
-    
-
-
+    // CAPTCHA front-end check optional; server will verify on submit
   });
 </script>
 {% endblock %}

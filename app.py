@@ -22,27 +22,68 @@ def home():
     businesses = db.Business.query.all()
     ratings = [round(b.rating) for b in businesses]
     new_captcha_dict = SIMPLE_CAPTCHA.create()
-
     return render_template("index.html", user=session.get("user"), businessInfo = businesses, ratings=ratings, captcha=new_captcha_dict)
 
 @app.route("/signout")
 def signout():
     session["user"] = None
+    session.modified = True
     return redirect("/")    
 
-@app.route("/login-user-post",methods=["POST"])
+@app.route("/login-user-post", methods=["POST"])
 def loginUserPost():
     username = request.form.get("username")
     password = request.form.get("password")
-
     c_hash = request.form.get('captcha-hash')
     c_text = request.form.get('captcha-text')
+
+    # Common data for rendering the home page again
+    businesses = db.Business.query.all()
+    ratings = [round(b.rating) for b in businesses]
+    new_captcha_dict = SIMPLE_CAPTCHA.create()
+
+    # CAPTCHA check
     if not SIMPLE_CAPTCHA.verify(c_text, c_hash):
-        return redirect("/")
-    
-    user = db.login_user(username=username,password=password)
+        message = "Invalid CAPTCHA"
+        error = True
+        return render_template(
+            "base.html",
+            user=session.get("user"),
+            businessInfo=businesses,
+            ratings=ratings,
+            captcha=new_captcha_dict,
+            error=error,
+            message=message,
+            show_modal=True,        # Keeps modal open
+            prev_username=username, # Keep filled username
+        )
+
+    try:
+        user = db.login_user(username=username, password=password)
+    except Exception as e:
+        user = None
+
+    # If invalid login
+    if not user:
+        message = "Invalid Username Or Password"
+        error = True
+        return render_template(
+            "base.html",
+            user=session.get("user"),
+            businessInfo=businesses,
+            ratings=ratings,
+            captcha=new_captcha_dict,
+            error=error,
+            message=message,
+            show_modal=True,        # Keeps modal open
+            prev_username=username, # Keep filled username
+        )
+
+    # Success: store user in session
     session["user"] = user
+    session.modified = True
     return redirect("/")
+
 
 @app.route("/submit-review",methods=["POST"])
 def postReview():
@@ -57,6 +98,10 @@ def postReview():
         rating=int(num_stars),
         review_text=description
     )
+
+    session["user"]["reviews"] = db.query_reviews(username=username)
+    print(db.query_reviews(username=username))
+    session.modified = True
     return redirect("/")
 
 @app.route("/create-business",methods=["POST"])
@@ -74,51 +119,84 @@ def createbusiness():
     return redirect("/")
 
 
-@app.route("/register")
+@app.route("/register", methods=["GET", "POST"])
 def register():
-    new_captcha_dict = SIMPLE_CAPTCHA.create()
-    return render_template("register.html", captcha=new_captcha_dict)
+    # GET -> show form with fresh captcha
+    if request.method == "GET":
+        new_captcha_dict = SIMPLE_CAPTCHA.create()
+        return render_template("register.html", captcha=new_captcha_dict)
 
-# Handle registration form submission
-@app.route("/register", methods=["POST"])
-def register_post():
+    # POST -> handle submission
     c_hash = request.form.get('captcha-hash')
     c_text = request.form.get('captcha-text')
+    username = request.form.get("username", "") or ""
+    password = request.form.get("password", "")
+    confirmPassword = request.form.get("confirmPassword", "")
 
-    # Verify CAPTCHA
+    # prepare a fresh captcha for any re-render
+    new_captcha_dict = SIMPLE_CAPTCHA.create()
+
+    # 1) CAPTCHA check
     if not SIMPLE_CAPTCHA.verify(c_text, c_hash):
-        return jsonify({"success": False, "message": "Invalid CAPTCHA."}), 400
+        message = "Invalid CAPTCHA"
+        return render_template(
+            "register.html",
+            captcha=new_captcha_dict,
+            error=True,
+            message=message,
+            prev_username=username
+        )
 
-    username = request.form.get("username")
-    password = request.form.get("password")
-    confirmPassword = request.form.get("confirmPassword")
+    # 2) username exists?
+    if db.check_username(username):
+        message = "Username is already taken!"
+        return render_template(
+            "register.html",
+            captcha=new_captcha_dict,
+            error=True,
+            message=message,
+            prev_username=username
+        )
 
-    # Check if username already exists
-    exists = db.check_username(username)
-    if exists:
-        return jsonify({"success": False, "message": "Username is already taken ! "}), 400
+    # 3) password match?
+    if password != confirmPassword:
+        message = "Passwords do not match."
+        return render_template(
+            "register.html",
+            captcha=new_captcha_dict,
+            error=True,
+            message=message,
+            prev_username=username
+        )
+
+    # 4) create user and sign in
+    user = db.create_user(username, password)
+    session["user"] = user
+    session.modified = True
+    return redirect("/")
 
 
-    # Create new user
-    if password == confirmPassword:
-        user = db.create_user(username, password)
-        session["user"]=user  
-        return redirect("/")
-    else:
-        return redirect("/register")
 
 
 @app.route("/business/<int:id>")
-def businessesPage(id):
+def businesses_page(id):
     businessesInfo = db.query_business(id)
     reviews = db.query_reviews(business_name=businessesInfo.name)
     rating = round(businessesInfo.rating)
     new_captcha_dict = SIMPLE_CAPTCHA.create()
     return render_template("post.html", user=session.get("user"), businessInfos=businessesInfo, reviews=reviews, rating=rating,captcha=new_captcha_dict)
 
+@app.route("/business/<int:id>/favorites", methods=["POST"])
+def business_modify_avorite(id):
+    business_name = db.query_business(id).name
+    session["user"]["favorites"] = db.change_favorite(username=session.get("user")["username"], business_name=business_name)
+    session.modified = True
+    
+    return redirect("/")
 
 @app.route("/accountsettings")
 def account():
+    
     return render_template("account.html", user=session.get("user"))
 
 @app.route("/accountsettings", methods=["POST"])

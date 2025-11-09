@@ -119,6 +119,9 @@
               {% for star in range(attributes[0]) %}
               <span class="text-yellow-400">★</span>
               {% endfor %}
+              {% for star in range(5 - attributes[0]) %}
+              <span class="text-yellow-400">☆</span>
+              {% endfor %}
               <!-- stars will be inserted dynamically -->
             </div>
           </div>

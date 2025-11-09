@@ -50,7 +50,7 @@ def init_db(app):
 
 def create_user(username, password):
     hashed_password = password#salt + hashlib.sha256(password.encode()).hexdigest()
-    new_user = User(username=username, password=hashed_password, reviews="{}")
+    new_user = User(username=username, password=hashed_password, reviews="{}", favorites="[]")
     db.session.add(new_user)
     db.session.commit()
     return new_user.to_dict()
@@ -77,7 +77,7 @@ def create_review(username, business_name, review_text, rating):
         review_count = len(business_review_dict)-1
         business.rating = (business.rating*review_count + rating) / len(business_review_dict)
         
-        user_review_dict = json.loads(business.reviews)
+        user_review_dict = json.loads(user.reviews)
         user_review_dict[business_name] = [rating, review_text]
         user.reviews = json.dumps(user_review_dict)
 
@@ -109,4 +109,30 @@ def check_username(username):
     user = User.query.filter_by(username=username).first()
     if user:
         return True
+    return False
+
+
+def change_favorite(username, business_name):
+    user = User.query.filter_by(username=username).first()
+    if user:
+        if user.favorites:
+            favorites = json.loads(user.favorites)
+        else:
+            favorites = {}
+
+        if business_name not in favorites:
+            favorites.append(business_name)
+        else:
+            favorites.remove(business_name)
+
+        user.favorites = json.dumps(favorites)
+        db.session.commit()
+        return favorites
+    
+    return False
+
+def query_favorites(username):
+    user = User.query.filter_by(username=username).first()
+    if user and user.favorites:
+        return json.loads(user.favorites)
     return False

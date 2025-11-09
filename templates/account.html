@@ -9,21 +9,51 @@
 
     <!-- Tabs -->
     <div class="flex justify-around mb-6 border-b border-gray-700">
-      <button class="tab-btn py-2 px-4 text-sm font-semibold text-gray-300 border-b-2 border-transparent hover:text-white hover:border-[#7b6ef6]" data-tab="bookmarks">Bookmarks</button>
       <button class="tab-btn py-2 px-4 text-sm font-semibold text-gray-300 border-b-2 border-transparent hover:text-white hover:border-[#7b6ef6]" data-tab="reviews">Previous Reviews</button>
       <button class="tab-btn py-2 px-4 text-sm font-semibold text-gray-300 border-b-2 border-transparent hover:text-white hover:border-[#7b6ef6]" data-tab="password">Change Password</button>
     </div>
 
     <!-- Bookmarks -->
-    <div id="bookmarks" class="tab-content">
+    <!-- <div id="bookmarks" class="tab-content">
       <h3 class="text-lg font-semibold mb-3">Your Bookmarks</h3>
       <p class="text-gray-400 text-sm">You haven’t bookmarked any businesses yet.</p>
-    </div>
+    </div> -->
 
     <!-- Reviews -->
-    <div id="reviews" class="tab-content hidden">
+    <div id="reviews" class="tab-content">
       <h3 class="text-lg font-semibold mb-3">Your Previous Reviews</h3>
-      <p class="text-gray-400 text-sm">You haven’t written any reviews yet.</p>
+      {% if not user.reviews %}
+        <p class="text-gray-400 text-sm">You haven’t written any reviews yet.</p>
+      {% endif %}
+
+      {% for reviewer, attributes in user.reviews.items() %}
+        <div class="max-w-2xl w-full bg-white shadow-md rounded-2xl p-5 flex flex-col gap-3 border border-gray-100 my-2 ">
+          <div class="flex justify-between items-start">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-lg font-bold">
+                <span>💼</span>
+              </div>
+              <div>
+                <p class="font-semibold text-gray-900" id="reviewer-name">{{reviewer}}</p>
+                <!-- <p class="text-sm text-gray-500" id="review-date">Oct 30, 2025</p> -->
+              </div>
+            </div>
+            <div class="flex" id="star-container">
+              {% for star in range(attributes[0]) %}
+              <span class="text-yellow-400">★</span>
+              {% endfor %}
+              {% for star in range(5 - attributes[0]) %}
+              <span class="text-yellow-400">☆</span>
+              {% endfor %}
+              <!-- stars will be inserted dynamically -->
+            </div>
+          </div>
+          <p class="text-gray-700 leading-relaxed" id="review-text">
+            {{attributes[1]}}
+          </p>
+        </div>
+      {% endfor %}
+      
     </div>
 
     <!-- Change Password -->
