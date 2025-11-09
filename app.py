@@ -113,7 +113,8 @@ def businessesPage(id):
     businessesInfo = db.query_business(id)
     reviews = db.query_reviews(business_name=businessesInfo.name)
     rating = round(businessesInfo.rating)
-    return render_template("post.html", user=session.get("user"), businessInfos=businessesInfo, reviews=reviews, rating=rating)
+    new_captcha_dict = SIMPLE_CAPTCHA.create()
+    return render_template("post.html", user=session.get("user"), businessInfos=businessesInfo, reviews=reviews, rating=rating,captcha=new_captcha_dict)
 
 
 @app.route("/accountsettings")
