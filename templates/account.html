@@ -22,11 +22,13 @@
     <!-- Reviews -->
     <div id="reviews" class="tab-content">
       <h3 class="text-lg font-semibold mb-3">Your Previous Reviews</h3>
-      {% if not user.reviews %}
-        <p class="text-gray-400 text-sm">You haven’t written any reviews yet.</p>
-      {% endif %}
 
-      {% for reviewer, attributes in user.reviews.items() %}
+      {% if user.reviews is string %}
+        <p class="text-gray-400 text-sm">You haven’t written any reviews yet.</p>
+
+      {% else %}
+
+        {% for reviewer, attributes in user.reviews.items() %}
         <div class="max-w-2xl w-full bg-white shadow-md rounded-2xl p-5 flex flex-col gap-3 border border-gray-100 my-2 ">
           <div class="flex justify-between items-start">
             <div class="flex items-center gap-3">
@@ -52,7 +54,8 @@
             {{attributes[1]}}
           </p>
         </div>
-      {% endfor %}
+        {% endfor %}
+      {% endif %}
       
     </div>
 
