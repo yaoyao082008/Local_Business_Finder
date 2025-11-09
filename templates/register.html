@@ -6,7 +6,7 @@
 <div class="flex justify-center items-center min-h-screen bg-[#0f1624] text-white">
   <div class="bg-[#121a26] p-8 rounded-2xl shadow-lg w-96 border border-[#1c2636] relative">
     <h2 class="text-2xl font-bold text-center mb-6">Create Account</h2>
-    <form id="registerForm" class="space-y-4" action="/register-user-post" method="post">
+    <form id="registerForm" class="space-y-4" action="/register" method="post">
       <img src="data:image/jpeg;base64, {{ captcha.img }}" alt="captcha" class="simple-captcha-img"/>
       <div>
         <label class="block mb-1 text-sm font-medium">Enter CAPTCHA</label>
@@ -99,6 +99,10 @@
         errorPopup.classList.add("hidden");
       }, 3000);
     }
+
+    
+
+
   });
 </script>
 {% endblock %}

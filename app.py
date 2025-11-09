@@ -79,25 +79,33 @@ def register():
     new_captcha_dict = SIMPLE_CAPTCHA.create()
     return render_template("register.html", captcha=new_captcha_dict)
 
-@app.route("/register-user-post", methods=["POST"])
-def register_user_post():
+# Handle registration form submission
+@app.route("/register", methods=["POST"])
+def register_post():
     c_hash = request.form.get('captcha-hash')
     c_text = request.form.get('captcha-text')
+
+    # Verify CAPTCHA
     if not SIMPLE_CAPTCHA.verify(c_text, c_hash):
-        return redirect("/register")
-    
+        return jsonify({"success": False, "message": "Invalid CAPTCHA."}), 400
+
     username = request.form.get("username")
     password = request.form.get("password")
     confirmPassword = request.form.get("confirmPassword")
 
-    if password==confirmPassword:
+    # Check if username already exists
+    exists = db.check_username(username)
+    if exists:
+        return jsonify({"success": False, "message": "Username is already taken ! "}), 400
+
+
+    # Create new user
+    if password == confirmPassword:
         user = db.create_user(username, password)
-        session["user"] = user
+        session["user"]=user  
         return redirect("/")
-        
     else:
         return redirect("/register")
-
 
 
 @app.route("/business/<int:id>")
@@ -118,6 +126,7 @@ def account_settings():
     username = request.form.get("username")
     db.change_password(username, new_password)
     return redirect("/")
+
 
 if __name__ == "__main__":
     app.run(debug=True)

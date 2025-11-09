@@ -104,3 +104,9 @@ def change_password(username, new_password):
         db.session.commit()
         return user.to_dict()
     return False
+
+def check_username(username):
+    user = User.query.filter_by(username=username).first()
+    if user:
+        return True
+    return False
