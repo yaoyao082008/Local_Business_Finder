@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, session, redirect, jsonify
 import db
 from flask_simple_captcha import CAPTCHA
-
+import json
 
 YOUR_CONFIG = {
     'SECRET_CAPTCHA_KEY': 'LONG_KEY',
@@ -196,8 +196,12 @@ def business_modify_avorite(id):
 
 @app.route("/accountsettings")
 def account():
+    user = session.get("user")
+
+    reviews = json.loads(user["reviews"])
+
     
-    return render_template("account.html", user=session.get("user"))
+    return render_template("account.html", user=session.get("user"), reviews = reviews)
 
 @app.route("/accountsettings", methods=["POST"])
 def account_settings():
