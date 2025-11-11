@@ -6,89 +6,89 @@ Byte-Sized Business Boost is a community-driven web application designed to help
 
 ✨ Features
 
-This application includes a comprehensive set of tools to enhance the user experience and drive engagement:
+    - This application includes a comprehensive set of tools to enhance the user experience and drive engagement:
 
-Category-Based Sorting: Effortlessly filter and browse local businesses by relevant categories such as Food & Drink, Retail, Entertainment, Services, and more, making discovery quick and targeted.
+    - Category-Based Sorting: Effortlessly filter and browse local businesses by relevant categories such as Food & Drink, Retail, Entertainment, Services, and more, making discovery quick and targeted.
 
-User Ratings and Reviews: Users can leave detailed written reviews and star ratings for businesses, creating a transparent and helpful feedback loop for the community.
+    - User Ratings and Reviews: Users can leave detailed written reviews and star ratings for businesses, creating a transparent and helpful feedback loop for the community.
 
-Review-Driven Sorting: Find the best-rated local gems instantly! Businesses can be sorted based on their average rating or the volume of reviews they have received.
+    - Review-Driven Sorting: Find the best-rated local gems instantly! Businesses can be sorted based on their average rating or the volume of reviews they have received.
 
-Favorites and Bookmarking: Save your go-to shops and must-try spots. Users can bookmark favorite businesses for quick access and personalized tracking.
+    - Favorites and Bookmarking: Save your go-to shops and must-try spots. Users can bookmark favorite businesses for quick access and personalized tracking.
 
-Bot Prevention (Verification): To ensure the integrity of reviews and ratings, the application includes a verification step (a simple captcha) during the submission process to prevent automated bot activity and spam.
+    - Bot Prevention (Verification): To ensure the integrity of reviews and ratings, the application includes a verification step (a simple captcha) during the submission process to prevent automated bot activity and spam.
+    
 
 🛠️ Technologies Used
 
-Python
+    Python - Primary programming language.
 
-Primary programming language.
+    Flask - The web microframework used for routing, sessions, and request handling.
 
-Flask
+    SQLAlchemy - SQL Toolkit and Object-Relational Mapper (ORM) used to manage the database schema and interactions.
 
-The web microframework used for routing, sessions, and request handling.
+    SQLite - Default development database (easily switchable to PostgreSQL or MySQL for production).
 
-SQLAlchemy
+    HTML/CSS/JS - Frontend structure and interactivity.
 
-SQL Toolkit and Object-Relational Mapper (ORM) used to manage the database schema and interactions.
+    Tailwind CSS - Pre-built CSS designs for fast development
 
-SQLite
+    flask_simple_captcha - Verification libary to prevent bot activity
 
-Default development database (easily switchable to PostgreSQL or MySQL for production).
-
-HTML/CSS/JS
-
-Frontend structure and interactivity.
-
-Tailwind CSS
-
-Pre-built CSS designs for fast development
-
-flask_simple_captcha
-
-Verification libary to prevent bot activity
 
 ⚙️ Installation and Setup
 
-Follow these steps to get a development copy of the project running locally.
+    Follow these steps to get a development copy of the project running locally.
 
-Prerequisites
+    Prerequisites: 
 
-Python 3.8+
+    -Python 3.8+
+    -pip (Python package installer)
 
-pip (Python package installer)
+    Step 1: Clone the Repository
 
-Step 1: Clone the Repository
-
-download the project from google drive (https://drive.google.com/drive/folders/1tI4kH4YczrcQpeLJIsQBglCDU4h9VrbX?dmr=1&ec=wgc-drive-hero-goto)
-
-
-Step 2: Create and Activate a Virtual Environment
-
-It is highly recommended to use a virtual environment to manage dependencies:
-
-# Create environment
-python3 -m venv venv
-
-# Activate environment (Linux/macOS)
-source venv/bin/activate
-
-# Activate environment (Windows)
-.\venv\Scripts\activate
+        download the project from google drive (https://drive.google.com/drive/folders/1tI4kH4YczrcQpeLJIsQBglCDU4h9VrbX?dmr=1&ec=wgc-drive-hero-goto)
 
 
-Step 3: Install Dependencies
+    Step 2: Create and Activate a Virtual Environment
 
-Install all required Python packages:
-
-pip install -r requirements.txt
-
-
-Step 4: Run the Application
-
-Start the Flask development server:
-
-python app.py
+        It is highly recommended to use a virtual environment to manage dependencies:
+        # Create environment
+        python3 -m venv venv
+        # Activate environment (Linux/macOS)
+        source venv/bin/activate
+        # Activate environment (Windows)
+        .\venv\Scripts\activate
 
 
-The application should now be running at http://127.0.0.1:5000/.
+    Step 3: Install Dependencies
+
+        Install all required Python packages:
+        pip install -r requirements.txt
+
+    Step 4: Run the Application
+
+        Start the Flask development server:
+        python app.py
+
+    Step 5: User Information
+
+        By default we have 7 different businesses from each category set up.
+        Each Business will have different amounts of reviews.
+        There are 2 accounts:
+        User (has written reviews)
+        username: user
+        password: user
+
+        noreview (has not written reviews)
+
+        username: noreview
+        password: user
+
+        Feel free to sign into each account to test out the features ! 
+
+
+
+    The application should now be running at http://127.0.0.1:5000/.
+
+- Made by Yaozhou Xiong, Prateek Kalusani, Shreyas Sindhaval
