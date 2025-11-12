@@ -22,6 +22,7 @@ def home():
     businesses = db.Business.query.all()
     ratings = [round(b.rating) for b in businesses]
     new_captcha_dict = SIMPLE_CAPTCHA.create()
+    # pass in all the necessary info for the home page
     return render_template("index.html", user=session.get("user"), businessInfo = businesses, ratings=ratings, captcha=new_captcha_dict)
 
 @app.route("/signout")
@@ -92,6 +93,7 @@ def postReview():
     num_stars = request.form.get("numStars")
     description = request.form.get("reviewDescription")
 
+    # add review to database
     db.create_review(
         username=username,
         business_name=business_name,
@@ -104,6 +106,7 @@ def postReview():
     session.modified = True
     return redirect("/")
 
+
 @app.route("/create-business",methods=["POST"])
 def createbusiness():
     name = request.form.get("businessName")
@@ -114,6 +117,7 @@ def createbusiness():
     category = request.form.get("businessCategory")
     address =  request.form.get("businessAddress")
 
+    # add business to database
     db.create_business(name=name, category=category,times=timePeriod,phone=cell,description=description,address=address)
 
     return redirect("/")
@@ -180,6 +184,7 @@ def register():
 
 @app.route("/business/<int:id>")
 def businesses_page(id):
+    # allow users to click into each business to view more details
     businessesInfo = db.query_business(id)
     reviews = db.query_reviews(business_name=businessesInfo.name)
     rating = round(businessesInfo.rating)
@@ -188,6 +193,7 @@ def businesses_page(id):
 
 @app.route("/business/<int:id>/favorites", methods=["POST"])
 def business_modify_avorite(id):
+    # add favorites to user
     business_name = db.query_business(id).name
     session["user"]["favorites"] = db.change_favorite(username=session.get("user")["username"], business_name=business_name)
     session.modified = True
@@ -198,13 +204,16 @@ def business_modify_avorite(id):
 def account():
     user = session.get("user")
 
-    reviews = json.loads(user["reviews"])
-
+    if isinstance(user["reviews"], str):
+        reviews = json.loads(user["reviews"])
+    else:
+        reviews= user["reviews"]
     
     return render_template("account.html", user=session.get("user"), reviews = reviews)
 
 @app.route("/accountsettings", methods=["POST"])
 def account_settings():
+    # reset passowrd option
     new_password = request.form.get("new_password")
     username = request.form.get("username")
     db.change_password(username, new_password)

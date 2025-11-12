@@ -41,7 +41,7 @@ function searchBusinesses() {
     var cards = document.getElementsByClassName('business');
     var i;
 
-    
+    // search business by name and include other filters
     for (i = 0; i < cards.length; i++) {
         var businessName = cards[i].getElementsByClassName("business-name")[0].innerText.toLowerCase();
         var type = cards[i].getAttribute('data-type')

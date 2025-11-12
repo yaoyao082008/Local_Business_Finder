@@ -35,6 +35,17 @@ Byte-Sized Business Boost is a community-driven web application designed to help
 
     flask_simple_captcha - Verification libary to prevent bot activity
 
+📋 How to use the local business directory
+
+- The homepage is where all the businesses are, users can sort filter and click on these businesses to view more information.
+- In order to add businesses one must sign in.
+- If you dont have an account you must click on the register now at the bottom of the sign in modal.
+- To view your reviews click on the top left account icon and then click account settings.
+- To change your password, click on account settings and go to the change password tab.
+- To leave a review you must sign in.
+- Each user is allowed one review per business.
+
+
 
 ⚙️ Installation and Setup
 
