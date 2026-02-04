@@ -134,7 +134,7 @@
             {{ business.businessId }}
           </span>
           {% if user %}
-          <button onclick="event.stopPropagation(); alert('hello');" class="bg-[#1a1a27]/70 rounded-full p-2 hover:bg-red-600 transition" style="position: absolute; bottom:10px; right:10px;">
+          <button onclick="event.stopPropagation(); toggleModalOn();" class="bg-[#1a1a27]/70 rounded-full p-2 hover:bg-red-600 transition" style="position: absolute; bottom:10px; right:10px;">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500 hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
             </svg>
@@ -174,9 +174,45 @@
       {% endfor %}
     </div>
   </div>
+
+  <!--Delte Modal-->
+  <div class="deleteBusinessModal hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center">
+    <div class="relative p-8 border w-96 shadow-lg rounded-xl bg-white">
+        <div class="text-center">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                </svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900">Are you sure?</h3>
+            <p class="text-sm text-gray-500 mt-2">
+                This action is permanent and cannot be reversed. Do you wish to continue?
+            </p>
+            <div class="flex flex-row justify-center gap-3 mt-6">
+                <button onclick="toggleModalOff();" class="px-4 py-2 bg-gray-200 text-gray-800 text-sm font-semibold rounded-lg hover:bg-gray-300 transition-colors w-full">
+                    Deny
+                </button>
+                <button class="px-4 py-2 bg-red-600 text-white text-sm font-semibold rounded-lg hover:bg-red-700 transition-colors shadow-md w-full">
+                    Confirm
+                </button>
+            </div>
+        </div>
+    </div>
+  </div>
 </div>
 
 <script src="{{url_for('static', filename='sortAndFilter.js')}}"></script>
+
+<script>
+  const deleteModal = document.querySelector(".deleteBusinessModal")
+
+  function toggleModalOn(){
+    deleteModal.classList.remove("hidden")
+  }
+  function toggleModalOff(){
+    deleteModal.classList.add("hidden")
+  }
+</script>
 
 {% if user %}
 <script>
