@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, session
 import hashlib, random, string
 import json
+import random
 
 
 db = SQLAlchemy()
@@ -13,6 +14,7 @@ class User(db.Model):
     password: Mapped[str] = mapped_column(db.String, nullable=False)
     reviews: Mapped[str] = mapped_column(db.String, nullable=True)
     favorites: Mapped[str] = mapped_column(db.String, nullable=True)
+    businesses: Mapped[str] = mapped_column(db.String, nullable=True)
 
     def to_dict(self):
         return {
@@ -20,7 +22,8 @@ class User(db.Model):
             "username": self.username,
             "reviews": self.reviews,
             "favorites": self.favorites,
-            "password" : self.password
+            "password" : self.password,
+            "businesses": self.businesses
         }
 
 class Business(db.Model):
@@ -33,12 +36,14 @@ class Business(db.Model):
     times: Mapped[str] = mapped_column(db.String, nullable=False)
     reviews: Mapped[str] = mapped_column(db.String, nullable=True)
     rating: Mapped[float] = mapped_column(db.Float, nullable=True)
+    businessId: Mapped[int] = mapped_column(db.String, nullable=True)
 
     def to_dict(self):
         return {
             "id": self.id,
             "name": self.name,
             "reviews": self.reviews,
+            "businessId": self.businessId,
         }
 
 def init_db(app):
@@ -50,13 +55,21 @@ def init_db(app):
 
 def create_user(username, password):
     hashed_password = password#salt + hashlib.sha256(password.encode()).hexdigest()
-    new_user = User(username=username, password=hashed_password, reviews="{}", favorites="[]")
+    new_user = User(username=username, password=hashed_password, reviews="{}", favorites="[]", businesses="[]")
     db.session.add(new_user)
     db.session.commit()
     return new_user.to_dict()
 
-def create_business(category, name, description, address, phone, times):
-    new_business = Business(category=category, name=name, description=description, address=address, phone=phone, times=times, reviews="{}", rating=0)
+def create_business(owner, category, name, description, address, phone, times):
+    rand_id = random.randint(1, 999999) + random.randint(1, 999999)
+    new_business = Business(category=category, name=name, description=description, address=address, phone=phone, times=times, reviews="{}", rating=0, businessId=rand_id)
+    
+    user = User.query.filter_by(username=owner).first()
+
+    business_id_list = json.loads(user.businesses)
+    business_id_list.append(rand_id)
+    user.businesses = json.dumps(business_id_list)
+    
     db.session.add(new_business)
     db.session.commit()
 

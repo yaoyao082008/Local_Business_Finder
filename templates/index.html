@@ -131,21 +131,29 @@
             class="w-full h-52 object-cover opacity-90 hover:opacity-100 transition" alt="">
           <span class="absolute top-3 left-3 bg-purple-600 text-xs px-3 py-1 rounded-full shadow text-white font-medium">
             {{business.category}}
+            {{ business.businessId }}
           </span>
           {% if user %}
+          <button onclick="event.stopPropagation(); alert('hello');" class="bg-[#1a1a27]/70 rounded-full p-2 hover:bg-red-600 transition" style="position: absolute; bottom:10px; right:10px;">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500 hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+          </button>
+          
           <form method="POST" action="/business/{{business.id}}/favorites">
             <button class="absolute top-3 right-3 bg-[#1a1a27]/70 rounded-full p-2 hover:bg-purple-700 transition text-white">
-              {% if business.name in user.favorites %}❤️
-              {% else %}🤍
+              {% if business.name in user.favorites %}
+              ❤️
+              {% else %}
+              🤍
               {% endif %}
-          {% else %}
-          <span class="absolute top-3 right-3 bg-[#1a1a27]/70 rounded-full p-2 hover:bg-purple-700 transition text-white">
-            🤍
-          </span>
-            {% endif %}
 
-          </button>
+              
+              
+            </button> 
+            
           </form>
+          {% endif %}
         </div>
         <div class="p-5">
           <h3 class="font-semibold text-lg text-gray-100 business-name">{{business.name}}</h3>

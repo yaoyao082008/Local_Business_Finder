@@ -20,10 +20,13 @@ db.init_db(app)
 @app.route("/")
 def home():
     businesses = db.Business.query.all()
+
+    print(businesses[0].to_dict())
+    
     ratings = [round(b.rating) for b in businesses]
     new_captcha_dict = SIMPLE_CAPTCHA.create()
     # pass in all the necessary info for the home page
-    return render_template("index.html", user=session.get("user"), businessInfo = businesses, ratings=ratings, captcha=new_captcha_dict)
+    return render_template("index.html", user=session.get("user"), businessInfo = businesses, ratings = ratings, captcha = new_captcha_dict)
 
 @app.route("/signout")
 def signout():
@@ -118,7 +121,7 @@ def createbusiness():
     address =  request.form.get("businessAddress")
 
     # add business to database
-    db.create_business(name=name, category=category,times=timePeriod,phone=cell,description=description,address=address)
+    db.create_business(owner=session.get("user")["username"], name=name, category=category,times=timePeriod,phone=cell,description=description,address=address)
 
     return redirect("/")
 
