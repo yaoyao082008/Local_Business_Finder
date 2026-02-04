@@ -23,6 +23,12 @@
       </div>
 
       <div class="flex items-center space-x-4">
+        <button
+          onclick="window.location.href = '/help'"
+          class="text-white font-semibold px-4 py-2 hover:bg-[#6759d9] transition"
+        >
+          Help
+        </button>
         {% if not user %}
         <button
           id="openModalBtn"
@@ -30,6 +36,8 @@
         >
           Sign In
         </button>
+
+        
         {% else %}
         <div class="relative inline-block text-left dropdown">
           <span class="rounded-md shadow-sm">
@@ -58,6 +66,8 @@
           </div>
         </div>
         {% endif %}
+
+        
       </div>
     </nav>
 

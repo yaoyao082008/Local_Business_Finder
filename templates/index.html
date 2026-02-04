@@ -131,14 +131,19 @@
             class="w-full h-52 object-cover opacity-90 hover:opacity-100 transition" alt="">
           <span class="absolute top-3 left-3 bg-purple-600 text-xs px-3 py-1 rounded-full shadow text-white font-medium">
             {{business.category}}
-            {{ business.businessId }}
+            {{ business.uniqueId }}
           </span>
+
           {% if user %}
-          <button onclick="event.stopPropagation(); toggleModalOn();" class="bg-[#1a1a27]/70 rounded-full p-2 hover:bg-red-600 transition" style="position: absolute; bottom:10px; right:10px;">
+          {% if user.businesses %}
+          {% if business.uniqueId in user.businesses %}
+          <button onclick="event.stopPropagation(); toggleModalOn({{business.uniqueId}});" class="bg-[#1a1a27]/70 rounded-full p-2 hover:bg-red-600 transition" style="position: absolute; bottom:10px; right:10px;">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500 hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
             </svg>
           </button>
+          {% endif %}
+          {% endif %}
           
           <form method="POST" action="/business/{{business.id}}/favorites">
             <button class="absolute top-3 right-3 bg-[#1a1a27]/70 rounded-full p-2 hover:bg-purple-700 transition text-white">
@@ -147,9 +152,6 @@
               {% else %}
               🤍
               {% endif %}
-
-              
-              
             </button> 
             
           </form>
@@ -175,7 +177,7 @@
     </div>
   </div>
 
-  <!--Delte Modal-->
+  <!--Delete Modal-->
   <div class="deleteBusinessModal hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center">
     <div class="relative p-8 border w-96 shadow-lg rounded-xl bg-white">
         <div class="text-center">
@@ -192,7 +194,7 @@
                 <button onclick="toggleModalOff();" class="px-4 py-2 bg-gray-200 text-gray-800 text-sm font-semibold rounded-lg hover:bg-gray-300 transition-colors w-full">
                     Deny
                 </button>
-                <button class="px-4 py-2 bg-red-600 text-white text-sm font-semibold rounded-lg hover:bg-red-700 transition-colors shadow-md w-full">
+                <button onclick="deleteBusiness()" class="px-4 py-2 bg-red-600 text-white text-sm font-semibold rounded-lg hover:bg-red-700 transition-colors shadow-md w-full">
                     Confirm
                 </button>
             </div>
@@ -206,12 +208,34 @@
 <script>
   const deleteModal = document.querySelector(".deleteBusinessModal")
 
-  function toggleModalOn(){
+  function toggleModalOn(businessInfo){
     deleteModal.classList.remove("hidden")
+    deleteModal.dataset.uniqueId = businessInfo
+    console.log(deleteModal.dataset.uniqueId)
   }
   function toggleModalOff(){
     deleteModal.classList.add("hidden")
   }
+
+  function deleteBusiness(){
+    let uniqueId = deleteModal.dataset.uniqueId
+
+    fetch("business/delete", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            uniqueId : uniqueId
+        })
+    }).then(response => {
+        location.reload();
+    });
+
+    
+  }
+
+
 </script>
 
 {% if user %}

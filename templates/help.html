@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+
+
+{% block title %}Additional Questions{% endblock %}
+{% block head %} 
+<style>
+    .text-purple { color: #7b6ef6; }
+    .bg-purple { background-color: #7b6ef6; }
+    .border-purple { border-color: #7b6ef6; }
+    .faq-item:hover .faq-answer { color: WHITE; }
+</style>
+{% endblock %}
+{% block body %}
+    <header class="max-w-3xl mb-16 p-4">
+        <h1 class="text-6xl font-black tracking-tighter uppercase mb-4">
+            Help <span class="text-purple">&</span> FAQ
+        </h1>
+    </header>
+
+    <div class="max-w-4xl space-y-12 p-4">
+        
+        <div class="faq-item group cursor-default">
+            <h2 class="text-2xl font-bold uppercase tracking-tight group-hover:text-purple transition-colors">
+                01. How do I add a business?
+            </h2>
+            <p class="faq-answer mt-3 text-lg border-l-4 border-purple pl-6">
+                To add a business, you must first sign or register for an account then an Add Business button will pop up and you can add your business.
+            </p>
+        </div>
+
+        <div class="faq-item group cursor-default">
+            <h2 class="text-2xl font-bold uppercase tracking-tight group-hover:text-purple transition-colors">
+                02. How do I delete my business
+            </h2>
+            <p class="faq-answer mt-3 text-lg border-l-4 border-purple pl-6">
+                You can only delete a business that you created. There is a red trash can icon in the bottom right of your business image.
+            </p>
+        </div>
+
+        <div class="faq-item group cursor-default">
+            <h2 class="text-2xl font-bold uppercase tracking-tight group-hover:text-purple transition-colors">
+                03. How do I leave reviews
+            </h2>
+            <p class="faq-answer mt-3 text-lg border-l-4 border-purple pl-6">
+                Each user can only leave 1 review per business. Simply click into the business and click add review
+            </p>
+        </div>
+
+        <div class="faq-item group cursor-default py-3">
+            <h2 class="text-2xl font-bold uppercase tracking-tight group-hover:text-purple transition-colors">
+                04. I cant do a captcha
+            </h2>
+            <p class="faq-answer mt-3 text-lg border-l-4 border-purple pl-6">
+                unfortunately our website is not compatible for the deaf and blind for now. please come back for later updates.
+        </div>
+
+    </div>
+
+{% endblock %}

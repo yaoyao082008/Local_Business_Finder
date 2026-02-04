@@ -7,19 +7,12 @@
   <div class="bg-[#121a26] p-8 rounded-2xl shadow-lg w-[30rem] border border-[#1c2636]">
     <h2 class="text-2xl font-bold text-center mb-6">Account Settings</h2>
 
-    <!-- Tabs -->
     <div class="flex justify-around mb-6 border-b border-gray-700">
       <button class="tab-btn py-2 px-4 text-sm font-semibold text-gray-300 border-b-2 border-transparent hover:text-white hover:border-[#7b6ef6]" data-tab="reviews">Previous Reviews</button>
+      <button class="tab-btn py-2 px-4 text-sm font-semibold text-gray-300 border-b-2 border-transparent hover:text-white hover:border-[#7b6ef6]" data-tab="businesses">Your Businesses</button>
       <button class="tab-btn py-2 px-4 text-sm font-semibold text-gray-300 border-b-2 border-transparent hover:text-white hover:border-[#7b6ef6]" data-tab="password">Change Password</button>
     </div>
 
-    <!-- Bookmarks -->
-    <!-- <div id="bookmarks" class="tab-content">
-      <h3 class="text-lg font-semibold mb-3">Your Bookmarks</h3>
-      <p class="text-gray-400 text-sm">You haven’t bookmarked any businesses yet.</p>
-    </div> -->
-
-    <!-- Reviews -->
     <div id="reviews" class="tab-content">
       <h3 class="text-lg font-semibold mb-3">Your Previous Reviews</h3>
 
@@ -37,7 +30,6 @@
               </div>
               <div>
                 <p class="font-semibold text-gray-900" id="reviewer-name">{{reviewer}}</p>
-                <!-- <p class="text-sm text-gray-500" id="review-date">Oct 30, 2025</p> -->
               </div>
             </div>
             <div class="flex" id="star-container">
@@ -47,7 +39,6 @@
               {% for star in range(5 - attributes[0]) %}
               <span class="text-yellow-400">☆</span>
               {% endfor %}
-              <!-- stars will be inserted dynamically -->
             </div>
           </div>
           <p class="text-gray-700 leading-relaxed" id="review-text">
@@ -59,7 +50,32 @@
       
     </div>
 
-    <!-- Change Password -->
+    <div id="businesses" class="tab-content hidden">
+      <h3 class="text-lg font-semibold mb-3">Your Businesses</h3>
+    
+      {% if not owned_ids %}
+        <p class="text-gray-400 text-sm">You do not own any businesses yet.</p>
+      {% else %}
+        {% for business in businessInfo %}
+          {# We check if the business ID exists in our standardized list #}
+          {% if business.uniqueId|string in owned_ids %}
+          <div class="max-w-2xl w-full bg-white shadow-md rounded-2xl p-4 flex items-center justify-between border border-gray-100 my-2">
+              <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-full bg-[#7b6ef6] flex items-center justify-center text-white text-lg font-bold">
+                      <span>🏢</span>
+                  </div>
+                  <div>
+                      <h4 class="font-bold text-gray-900">{{ business.name }}</h4>
+                      <span class="text-xs bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full">{{ business.category }}</span>
+                  </div>
+              </div>
+              <a href="/business/{{ business.id }}" class="text-sm text-[#7b6ef6] font-semibold hover:underline">View</a>
+          </div>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+  </div>
+
     <div id="password" class="tab-content hidden">
       <form id="passwordForm" method="POST" class="space-y-4">
         <div>

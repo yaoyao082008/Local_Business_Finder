@@ -23,7 +23,7 @@ class User(db.Model):
             "reviews": self.reviews,
             "favorites": self.favorites,
             "password" : self.password,
-            "businesses": self.businesses
+            "businesses": self.businesses,
         }
 
 class Business(db.Model):
@@ -36,14 +36,14 @@ class Business(db.Model):
     times: Mapped[str] = mapped_column(db.String, nullable=False)
     reviews: Mapped[str] = mapped_column(db.String, nullable=True)
     rating: Mapped[float] = mapped_column(db.Float, nullable=True)
-    businessId: Mapped[int] = mapped_column(db.String, nullable=True)
+    uniqueId: Mapped[int] = mapped_column(db.String, nullable=True)
 
     def to_dict(self):
         return {
             "id": self.id,
             "name": self.name,
             "reviews": self.reviews,
-            "businessId": self.businessId,
+            "uniqueId": self.uniqueId,
         }
 
 def init_db(app):
@@ -61,8 +61,8 @@ def create_user(username, password):
     return new_user.to_dict()
 
 def create_business(owner, category, name, description, address, phone, times):
-    rand_id = random.randint(1, 999999) + random.randint(1, 999999)
-    new_business = Business(category=category, name=name, description=description, address=address, phone=phone, times=times, reviews="{}", rating=0, businessId=rand_id)
+    rand_id = random.randint(0, 9999) * 100 + random.randint(0, 999999)
+    new_business = Business(category=category, name=name, description=description, address=address, phone=phone, times=times, reviews="{}", rating=0, uniqueId=rand_id)
     
     user = User.query.filter_by(username=owner).first()
 
@@ -72,6 +72,8 @@ def create_business(owner, category, name, description, address, phone, times):
     
     db.session.add(new_business)
     db.session.commit()
+
+    return user.businesses
 
 def login_user(username, password):
     user = User.query.filter_by(username=username).first()
@@ -149,3 +151,15 @@ def query_favorites(username):
     if user and user.favorites:
         return json.loads(user.favorites)
     return False
+
+def delete_business(owner, uid):
+    business = Business.query.filter_by(uniqueId=uid).first()
+
+    owner = User.query.filter_by(username=owner).first()
+    business_id_list = json.loads(owner.businesses)
+    uid = int(uid)
+    business_id_list.remove(uid)
+    owner.businesses = json.dumps(business_id_list)
+
+    db.session.delete(business)
+    db.session.commit()
