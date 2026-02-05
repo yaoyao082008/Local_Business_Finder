@@ -3,168 +3,164 @@
 {% block title %}Account Settings{% endblock %}
 
 {% block body %}
-<div class="flex justify-center items-center min-h-screen bg-[#0f1624] text-white">
-  <div class="bg-[#121a26] p-8 rounded-2xl shadow-lg w-[30rem] border border-[#1c2636]">
-    <h2 class="text-2xl font-bold text-center mb-6">Account Settings</h2>
+<div class="min-h-screen bg-[#0f1624] text-white flex justify-center items-start pt-12">
+    <div class="bg-[#121a26] p-8 rounded-2xl shadow-xl w-full max-w-2xl border border-[#1c2636] mx-4">
+        <h2 class="text-3xl font-bold text-center mb-8">Account Settings</h2>
 
-    <div class="flex justify-around mb-6 border-b border-gray-700">
-      <button class="tab-btn py-2 px-4 text-sm font-semibold text-gray-300 border-b-2 border-transparent hover:text-white hover:border-[#7b6ef6]" data-tab="reviews">Previous Reviews</button>
-      <button class="tab-btn py-2 px-4 text-sm font-semibold text-gray-300 border-b-2 border-transparent hover:text-white hover:border-[#7b6ef6]" data-tab="businesses">Your Businesses</button>
-      <button class="tab-btn py-2 px-4 text-sm font-semibold text-gray-300 border-b-2 border-transparent hover:text-white hover:border-[#7b6ef6]" data-tab="password">Change Password</button>
-    </div>
+        <div class="flex justify-around mb-8 border-b border-gray-700">
+            <button class="tab-btn py-3 px-6 text-sm font-semibold text-gray-400 border-b-2 border-transparent hover:text-white transition-all duration-200" data-tab="reviews">
+                Previous Reviews
+            </button>
+            <button class="tab-btn py-3 px-6 text-sm font-semibold text-gray-400 border-b-2 border-transparent hover:text-white transition-all duration-200" data-tab="businesses">
+                Your Businesses
+            </button>
+            <button class="tab-btn py-3 px-6 text-sm font-semibold text-gray-400 border-b-2 border-transparent hover:text-white transition-all duration-200" data-tab="password">
+                Change Password
+            </button>
+        </div>
 
-    <div id="reviews" class="tab-content">
-      <h3 class="text-lg font-semibold mb-3">Your Previous Reviews</h3>
+        <div id="reviews" class="tab-content space-y-4">
+            {% if not reviews %}
+                <p class="text-gray-500 text-center py-10 bg-[#0f1624] rounded-xl border border-dashed border-gray-700">
+                    You haven’t written any reviews yet.
+                </p>
+            {% else %}
+                {% for business_name, attributes in reviews.items() %}
+                <div class="bg-[#1c2636] rounded-xl p-5 border border-[#2a3547] shadow-sm">
+                    <div class="flex justify-between items-center mb-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-[#7b6ef6]/20 flex items-center justify-center text-white font-bold">
+                                🏢
+                            </div>
+                            <p class="font-bold text-lg text-gray-100">{{ business_name }}</p>
+                        </div>
+                        <div class="flex text-yellow-400">
+                            {% for star in range(attributes[0]) %} ★ {% endfor %}
+                            {% for star in range(5 - attributes[0]) %} ☆ {% endfor %}
+                        </div>
+                    </div>
+                    <p class="text-gray-300 italic">"{{ attributes[1] }}"</p>
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
 
-      {% if not reviews %}
-        <p class="text-gray-400 text-sm">You haven’t written any reviews yet.</p>
+        <div id="businesses" class="tab-content hidden space-y-4">
+            <div class="flex flex-col gap-4">
+                {% set ns = namespace(found=false) %}
+                {% for business in businessInfo %}
+                    {# Comparing business integer uniqueId to our standardized list of owned IDs #}
+                    {% if business.uniqueId|string in owned_ids %}
+                        {% set ns.found = true %}
+                        <div class="bg-[#12121a] rounded-xl border border-[#2a2a3d] p-5 flex items-center justify-between hover:border-[#7b6ef6] transition group shadow-lg">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-lg bg-[#7b6ef6]/10 flex items-center justify-center text-2xl group-hover:bg-[#7b6ef6]/20 transition">
+                                    🏢
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-lg text-white">{{ business.name }}</h4>
+                                    <div class="flex flex-col text-sm text-gray-400 mt-0.5">
+                                        <span>📍 {{ business.address }}</span>
+                                        <span class="text-xs bg-[#2a2a3d] text-gray-300 w-fit px-2 py-0.5 rounded-full mt-2">
+                                            {{ business.category|capitalize }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center gap-3">
+                                <a href="/business/{{ business.id }}" class="px-4 py-2 bg-[#2a2a3d] hover:bg-[#3f3f5a] text-white text-sm font-medium rounded-lg transition">
+                                    View
+                                </a>
+                                <button onclick="toggleModalOn({{ business.uniqueId }})" class="p-2 bg-red-900/20 hover:bg-red-600 text-red-500 hover:text-white rounded-lg transition">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
 
-      {% else %}
-
-        {% for reviewer, attributes in reviews.items() %}
-        <div class="max-w-2xl w-full bg-white shadow-md rounded-2xl p-5 flex flex-col gap-3 border border-gray-100 my-2 ">
-          <div class="flex justify-between items-start">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-lg font-bold">
-                <span>💼</span>
-              </div>
-              <div>
-                <p class="font-semibold text-gray-900" id="reviewer-name">{{reviewer}}</p>
-              </div>
+                {% if not ns.found %}
+                    <div class="text-center py-10 bg-[#0f1624] rounded-xl border border-dashed border-gray-700">
+                        <p class="text-gray-500">You don't own any businesses yet.</p>
+                    </div>
+                {% endif %}
             </div>
-            <div class="flex" id="star-container">
-              {% for star in range(attributes[0]) %}
-              <span class="text-yellow-400">★</span>
-              {% endfor %}
-              {% for star in range(5 - attributes[0]) %}
-              <span class="text-yellow-400">☆</span>
-              {% endfor %}
-            </div>
-          </div>
-          <p class="text-gray-700 leading-relaxed" id="review-text">
-            {{attributes[1]}}
-          </p>
         </div>
-        {% endfor %}
-      {% endif %}
-      
+
+        <div id="password" class="tab-content hidden">
+            <form id="passwordForm" action="/accountsettings" method="POST" class="space-y-5">
+                <input type="hidden" name="username" value="{{ user.username }}">
+                
+                <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-300">Current Password</label>
+                    <input name="current_password" type="password" class="w-full px-4 py-2.5 bg-[#0f1624] border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7b6ef6] transition" required />
+                </div>
+
+                <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-300">New Password</label>
+                    <input name="new_password" type="password" class="w-full px-4 py-2.5 bg-[#0f1624] border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7b6ef6] transition" required />
+                </div>
+
+                <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-300">Confirm New Password</label>
+                    <input name="confirm_new_password" type="password" class="w-full px-4 py-2.5 bg-[#0f1624] border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7b6ef6] transition" required />
+                </div>
+
+                <p id="errorMsg" class="text-red-400 text-sm bg-red-400/10 p-3 rounded-lg hidden"></p>
+                <p id="successMsg" class="text-green-400 text-sm bg-green-400/10 p-3 rounded-lg hidden">Password updated successfully!</p>
+
+                <button type="submit" class="w-full bg-[#7b6ef6] hover:bg-[#6759d9] text-white font-bold py-3 rounded-lg shadow-lg transition-all">
+                    Update Password
+                </button>
+            </form>
+        </div>
     </div>
-
-    <div id="businesses" class="tab-content hidden">
-      <h3 class="text-lg font-semibold mb-3">Your Businesses</h3>
-    
-      {% if not owned_ids %}
-        <p class="text-gray-400 text-sm">You do not own any businesses yet.</p>
-      {% else %}
-        {% for business in businessInfo %}
-          {# We check if the business ID exists in our standardized list #}
-          {% if business.uniqueId|string in owned_ids %}
-          <div class="max-w-2xl w-full bg-white shadow-md rounded-2xl p-4 flex items-center justify-between border border-gray-100 my-2">
-              <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 rounded-full bg-[#7b6ef6] flex items-center justify-center text-white text-lg font-bold">
-                      <span>🏢</span>
-                  </div>
-                  <div>
-                      <h4 class="font-bold text-gray-900">{{ business.name }}</h4>
-                      <span class="text-xs bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full">{{ business.category }}</span>
-                  </div>
-              </div>
-              <a href="/business/{{ business.id }}" class="text-sm text-[#7b6ef6] font-semibold hover:underline">View</a>
-          </div>
-          {% endif %}
-        {% endfor %}
-      {% endif %}
-  </div>
-
-    <div id="password" class="tab-content hidden">
-      <form id="passwordForm" method="POST" class="space-y-4">
-        <div>
-          <label class="block mb-1 text-sm font-medium">Current Password</label>
-          <input
-            name="current_password"
-            type="password"
-            class="w-full px-3 py-2 bg-[#0f1624] border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7b6ef6]"
-            required
-          />
-        </div>
-
-        <div>
-          <label class="block mb-1 text-sm font-medium">New Password</label>
-          <input
-            name="new_password"
-            type="password"
-            class="w-full px-3 py-2 bg-[#0f1624] border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7b6ef6]"
-            required
-          />
-        </div>
-
-        <div>
-          <label class="block mb-1 text-sm font-medium">Confirm New Password</label>
-          <input
-            name="confirm_new_password"
-            type="password"
-            class="w-full px-3 py-2 bg-[#0f1624] border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7b6ef6]"
-            required
-          />
-        </div>
-
-        <p id="errorMsg" class="text-red-500 text-sm text-center hidden"></p>
-        <p id="successMsg" class="text-green-500 text-sm text-center hidden">Password updated successfully!</p>
-
-        <button
-          type="submit"
-          class="w-full bg-[#7b6ef6] hover:bg-[#6759d9] text-white font-semibold py-2 rounded-lg transition"
-        >
-          Update Password
-        </button>
-      </form>
-    </div>
-  </div>
 </div>
 
 <script>
-  // Tab switching logic
-  const tabs = document.querySelectorAll(".tab-btn");
-  const contents = document.querySelectorAll(".tab-content");
+    // Improved Tab switching logic
+    const tabs = document.querySelectorAll(".tab-btn");
+    const contents = document.querySelectorAll(".tab-content");
 
-  tabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-      contents.forEach((c) => c.classList.add("hidden"));
-      tabs.forEach((t) => t.classList.remove("text-white", "border-[#7b6ef6]"));
-      const target = document.getElementById(tab.dataset.tab);
-      target.classList.remove("hidden");
-      tab.classList.add("text-white", "border-[#7b6ef6]");
+    tabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+            const targetId = tab.dataset.tab;
+            
+            contents.forEach((c) => c.classList.add("hidden"));
+            tabs.forEach((t) => t.classList.remove("text-white", "border-[#7b6ef6]"));
+            
+            document.getElementById(targetId).classList.remove("hidden");
+            tab.classList.add("text-white", "border-[#7b6ef6]");
+        });
     });
-  });
 
-  const actualPassword = "{{ user.password }}";
+    // Initialize first tab
+    document.querySelector('[data-tab="reviews"]').click();
 
-  // Password form validation
-  document.getElementById("passwordForm").addEventListener("submit", function (e) {
-    const currentPassword = document.querySelector("[name='current_password']").value;
-    const newPassword = document.querySelector("[name='new_password']").value;
-    const confirmPassword = document.querySelector("[name='confirm_new_password']").value;
-    const errorMsg = document.getElementById("errorMsg");
-    const successMsg = document.getElementById("successMsg");
+    // Password validation
+    const actualPassword = "{{ user.password }}";
+    document.getElementById("passwordForm").addEventListener("submit", function (e) {
+        const currentPassword = document.querySelector("[name='current_password']").value;
+        const newPassword = document.querySelector("[name='new_password']").value;
+        const confirmPassword = document.querySelector("[name='confirm_new_password']").value;
+        const errorMsg = document.getElementById("errorMsg");
 
-    if (currentPassword !== actualPassword) {
-      e.preventDefault();
-      errorMsg.textContent = "Current password is incorrect.";
-      errorMsg.classList.remove("hidden");
-      successMsg.classList.add("hidden");
-      return;
-    }
+        if (currentPassword !== actualPassword) {
+            e.preventDefault();
+            errorMsg.textContent = "❌ Current password is incorrect.";
+            errorMsg.classList.remove("hidden");
+            return;
+        }
 
-    if (newPassword !== confirmPassword) {
-      e.preventDefault();
-      errorMsg.textContent = "New passwords do not match.";
-      errorMsg.classList.remove("hidden");
-      successMsg.classList.add("hidden");
-      return;
-    }
-
-    errorMsg.classList.add("hidden");
-    successMsg.classList.remove("hidden");
-  });
+        if (newPassword !== confirmPassword) {
+            e.preventDefault();
+            errorMsg.textContent = "❌ New passwords do not match.";
+            errorMsg.classList.remove("hidden");
+            return;
+        }
+    });
 </script>
 {% endblock %}

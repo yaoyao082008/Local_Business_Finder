@@ -203,6 +203,44 @@ def business_modify_favorite(id):
     
     return redirect("/")
 
+
+
+@app.route("/accountsettings")
+def account_settings_view():
+    user_session = session.get("user")
+    if not user_session:
+        return redirect("/")
+
+    db_user = db.User.query.filter_by(username=user_session["username"]).first()
+    all_businesses = db.Business.query.all()
+
+    try:
+        # Parse the JSON string from the database
+        raw_owned_ids = json.loads(db_user.businesses)
+        # FORCE everything in this list to be a string
+        owned_ids = [str(uid) for uid in raw_owned_ids]
+    except:
+        owned_ids = []
+
+    # --- DEBUG ---
+    print(f"DEBUG: Owned IDs (as strings): {owned_ids}", flush=True)
+    # We check business.uniqueId by converting it to a string too
+    match_count = sum(1 for b in all_businesses if str(b.uniqueId) in owned_ids)
+    print(f"DEBUG: Matches found after string conversion: {match_count}", flush=True)
+
+    try:
+        reviews = json.loads(db_user.reviews)
+    except:
+        reviews = {}
+
+    return render_template(
+        "account.html", 
+        user=user_session, 
+        owned_ids=owned_ids,  # Passing the string list to HTML
+        businessInfo=all_businesses, 
+        reviews=reviews
+    )
+
 @app.route("/accountsettings")
 def account():
     user = session.get("user")
@@ -221,53 +259,6 @@ def account_settings():
     username = request.form.get("username")
     db.change_password(username, new_password)
     return redirect("/")
-
-@app.route("/accountsettings")
-def account_settings_view():
-    # 1. Get user from session
-    user_session = session.get("user")
-    if not user_session:
-        return redirect("/")
-
-    # 2. Fetch all businesses from DB (required for the loop in HTML)
-    all_businesses = db.Business.query.all()
-
-    # 3. Parse Reviews
-    # We ensure reviews are a dictionary for the template's .items() loop
-    user_reviews = user_session.get("reviews", "{}")
-    if isinstance(user_reviews, str):
-        try:
-            parsed_reviews = json.loads(user_reviews)
-        except:
-            parsed_reviews = {}
-    else:
-        parsed_reviews = user_reviews
-
-    # 4. Parse Owned Businesses
-    # Convert the stored string of IDs into a list of strings for easy comparison
-    raw_owned = user_session.get("businesses", "[]")
-    owned_ids_list = []
-    
-    if isinstance(raw_owned, str):
-        try:
-            # Try to parse as JSON list: ["1", "2"]
-            owned_ids_list = json.loads(raw_owned)
-        except:
-            # Fallback for comma-separated string: "1, 2"
-            owned_ids_list = [item.strip() for item in raw_owned.split(",") if item.strip()]
-    elif isinstance(raw_owned, list):
-        owned_ids_list = raw_owned
-
-    # Standardize all IDs to strings to match the database uniqueId column type
-    owned_ids_list = [str(i) for i in owned_ids_list]
-
-    return render_template(
-        "account.html", 
-        user=user_session, 
-        reviews=parsed_reviews, 
-        businessInfo=all_businesses,
-        owned_ids=owned_ids_list
-    )
 
 @app.route("/business/delete", methods=["GET", "POST"])
 def delete_business():
