@@ -87,7 +87,7 @@ Byte-Sized Business Boost is a community-driven web application designed to help
         By default we have 7 different businesses from each category set up.
         Each Business will have different amounts of reviews.
         There are 2 accounts:
-        User (has written reviews)
+        User (has written reviews, all businesses are also owned by user)
         username: user
         password: user
 
@@ -100,6 +100,6 @@ Byte-Sized Business Boost is a community-driven web application designed to help
 
 
 
-    The application should now be running at http://127.0.0.1:5000/.
+    The application should now be running at http://127.0.0.1:5000/ (important it is port 5000).
 
 - Made by Yaozhou Xiong, Prateek Kalusani, Shreyas Sindhaval

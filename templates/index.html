@@ -131,7 +131,6 @@
             class="w-full h-52 object-cover opacity-90 hover:opacity-100 transition" alt="">
           <span class="absolute top-3 left-3 bg-purple-600 text-xs px-3 py-1 rounded-full shadow text-white font-medium">
             {{business.category}}
-            {{ business.uniqueId }}
           </span>
 
           {% if user %}
@@ -210,6 +209,7 @@
 
   function toggleModalOn(businessInfo){
     deleteModal.classList.remove("hidden")
+    //pass the business ID we want to delete to the modal
     deleteModal.dataset.uniqueId = businessInfo
     console.log(deleteModal.dataset.uniqueId)
   }
@@ -220,6 +220,7 @@
   function deleteBusiness(){
     let uniqueId = deleteModal.dataset.uniqueId
 
+    //send it to backend
     fetch("business/delete", {
         method: "POST",
         headers: {
