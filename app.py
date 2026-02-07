@@ -273,7 +273,8 @@ def delete_business():
 
 @app.route("/help")
 def help():
-    return render_template("help.html", user=session.get("user"))
+    new_captcha_dict = SIMPLE_CAPTCHA.create()
+    return render_template("help.html", user=session.get("user"), captcha=new_captcha_dict)
 
 
 if __name__ == "__main__":
